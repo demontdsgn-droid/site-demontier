@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Demont Designer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Demont: identidade visual e estratégia digital por Rafaela Demontier.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header" id="header">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Demont, início"><img src="img/logo-claro.png" width="900" height="152" alt="Demont"></a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#inicio" data-nav="inicio">Início</a>
+      <a href="#servicos" data-nav="servicos">Serviços</a>
+      <a href="#sobre" data-nav="sobre">Sobre</a>
+      <a href="#portfolio" data-nav="portfolio">Portfólio</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn outline small" href="#contato">Orçamento</a>
+  </div>
+</header>
+
+<main>
+  <div data-view="inicio">
+  <section class="hero-full" id="topo" aria-label="Demont">
+    <h1 class="sr-only">Demont, identidade visual e estratégia digital</h1>
+    <picture>
+      <source media="(max-width: 40rem)" srcset="img/capa-mobile.jpg" width="1200" height="1500">
+      <img src="img/capa.jpg" width="2400" height="1350" alt="Logo Demont, identidade visual e estratégia digital, ao lado de um copo-de-leite em preto e branco" fetchpriority="high">
+    </picture>
+  </section>
+
+  <section class="intro" aria-label="Apresentação">
+    <div class="wrap">
+      <p class="big">Identidade visual e estratégia digital para marcas que querem ser reconhecidas e lembradas.</p>
+      <div class="actions">
+        <a class="btn" href="#servicos">Ver serviços</a>
+        <a class="btn ghost" href="#contato">Pedir orçamento</a>
+      </div>
+    </div>
+  </section>
+
+    <section class="band" aria-labelledby="quem-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="quem-title">Para quem é a Demont.</h2>
+      </div>
+      <div class="personas">
+        <article class="persona">
+          <h3>Para quem está começando.</h3>
+          <p>O negócio é novo ou ainda não tem identidade? Eu crio a base visual para você começar já com cara de marca.</p>
+        </article>
+        <article class="persona">
+          <h3>Para quem quer se organizar nas redes.</h3>
+          <p>O perfil está sem padrão e sem rotina? Organizo a bio, o conteúdo e as artes para você postar com constância.</p>
+        </article>
+        <article class="persona">
+          <h3>Para quem quer renovar a marca.</h3>
+          <p>A marca existe, mas já não representa o seu momento? Atualizo o visual para ela acompanhar o seu negócio.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc-teaser" aria-labelledby="svc-title">
+    <div class="wrap">
+      <h2 id="svc-title">O que posso fazer pela sua marca.</h2>
+      <ul class="svc-rows">
+        <li><a href="#servicos"><span class="n">01</span><span class="t">Identidade visual</span><span class="d">Logo, cores e tipografia da marca.</span><span class="ar" aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="#servicos"><span class="n">02</span><span class="t">Personalizados</span><span class="d">Papelaria e itens com a sua marca.</span><span class="ar" aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="#servicos"><span class="n">03</span><span class="t">Estratégia digital</span><span class="d">Bio, linha editorial e conteúdo do feed.</span><span class="ar" aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="#servicos"><span class="n">04</span><span class="t">Design e edições</span><span class="d">Artes, stories, capas e edição de vídeos.</span><span class="ar" aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="#servicos"><span class="n">05</span><span class="t">Captação de conteúdo</span><span class="d">Fotos e vídeos para as suas redes.</span><span class="ar" aria-hidden="true">&rarr;</span></a></li>
+      </ul>
+      <p class="svc-cta"><a class="btn outline" href="#servicos">Ver todos os serviços &rarr;</a></p>
+    </div>
+  </section>
+
+  <section class="statement" aria-labelledby="frase-title">
+    <div class="wrap">
+      <div>
+        <h2 id="frase-title">Talvez a sua marca já seja boa. <span class="soft">Mas ainda não está sendo lembrada.</span></h2>
+        <a class="btn outline" href="#contato">Falar comigo &rarr;</a>
+      </div>
+      <div class="statement-photo" role="img" aria-label="Espaço reservado para uma foto de material da marca">Espaço para uma foto ou mockup</div>
+    </div>
+  </section>
+
+  <section class="showcase" aria-labelledby="vitrine-title" aria-roledescription="carrossel">
+    <div class="wrap">
+      <div class="showcase-head">
+        <h2 id="vitrine-title">Marcas que ganharam voz, clareza e identidade.</h2>
+        <div class="car-ctrl">
+          <span class="car-count" id="car-count" aria-live="polite">01 / 05</span>
+          <button class="car-btn" id="car-prev" type="button" aria-label="Projeto anterior">&larr;</button>
+          <button class="car-btn" id="car-next" type="button" aria-label="Próximo projeto">&rarr;</button>
+        </div>
+      </div>
+      <!-- Espaços de exemplo: troque cada .tile por uma <img> do seu projeto e retire a etiqueta "Exemplo". -->
+      <div class="car-track" id="car-track" tabindex="0" aria-label="Projetos em destaque">
+        <article class="slide tile t1"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">Aa</div><div class="cap"><strong>Identidade visual</strong><span>Logo, paleta e tipografia</span></div></article>
+        <article class="slide tile t2"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">@</div><div class="cap"><strong>Redes sociais</strong><span>Linha de posts</span></div></article>
+        <article class="slide tile t3"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">M</div><div class="cap"><strong>Monograma</strong><span>Marca pessoal</span></div></article>
+        <article class="slide tile t4"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">O</div><div class="cap"><strong>Destaques</strong><span>Capas do Instagram</span></div></article>
+        <article class="slide tile t6"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">Manual</div><div class="cap"><strong>Manual da marca</strong><span>Regras de uso</span></div></article>
+      </div>
+      <p class="showcase-cta"><a class="btn outline" href="#portfolio">Ver portfólio completo &rarr;</a></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="prazer-title">
+    <div class="wrap about">
+      <div class="photo"><img src="img/rafaela.jpg" width="1254" height="1254" alt="Rafaela Demontier, designer gráfica" loading="lazy"></div>
+      <div>
+        <p class="eyebrow-sm">Um pouco sobre mim</p>
+        <h2 id="prazer-title">Rafaela Demontier</h2>
+        <div class="text">
+          <p>Sou formada em Design Gráfico e trabalho com identidade visual e com a presença de marcas nas redes sociais.</p>
+        </div>
+        <p class="more"><a class="btn outline" href="#sobre">Conheça a minha história &rarr;</a></p>
+      </div>
+    </div>
+  </section>
+
+  </div>
+
+  <div data-view="servicos" hidden>
+  <section aria-labelledby="servicos-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="servicos-title">Por onde a sua marca precisa começar?</h2>
+      </div>
+      <div class="svc-stack">
+        <article class="svc-block">
+          <div class="svc-text">
+            <p class="eyebrow">A base da marca</p>
+            <h3>Identidade visual</h3>
+            <p class="svc-desc">Antes de desenhar, eu entendo o seu negócio e o público que você quer alcançar. Depois crio o visual da marca, para ela ser reconhecida em qualquer lugar.</p>
+            <div class="deliv">
+              <p class="deliv-title">O que você recebe</p>
+              <ul><li>Logotipo e variações</li><li>Paleta de cores</li><li>Tipografia</li><li>Manual da marca</li><li>Arquivos finais para uso</li></ul>
+            </div>
+            <a class="btn outline small" href="#contato" data-servico="Identidade visual">Quero este serviço</a>
+          </div>
+          <div class="svc-media">
+            <div class="shot s1" role="img" aria-label="Espaço reservado para uma imagem de Identidade visual"><span class="mark" aria-hidden="true">Aa</span><span class="shot-note">Espaço para o seu mockup</span></div>
+          </div>
+        </article>
+        <article class="svc-block">
+          <div class="svc-text">
+            <p class="eyebrow">No mundo físico</p>
+            <h3>Personalizados</h3>
+            <p class="svc-desc">Papelaria e itens personalizados que levam a sua marca para fora da tela. Eu crio as artes e cuido da impressão.</p>
+            <div class="deliv">
+              <p class="deliv-title">O que você recebe</p>
+              <ul><li>Cartões de visita</li><li>Pastas</li><li>Adesivos e etiquetas</li><li>Papel timbrado e envelopes</li><li>Blocos de anotações</li><li>Cartões de agradecimento</li><li>Embalagens e sacolas</li></ul>
+            </div>
+            <a class="btn outline small" href="#contato" data-servico="Personalizados">Quero este serviço</a>
+          </div>
+          <div class="svc-media">
+            <div class="shot s2" role="img" aria-label="Espaço reservado para uma imagem de Personalizados"><span class="mark" aria-hidden="true">P</span><span class="shot-note">Espaço para o seu mockup</span></div>
+          </div>
+        </article>
+        <article class="svc-block">
+          <div class="svc-text">
+            <p class="eyebrow">Antes de postar</p>
+            <h3>Estratégia digital</h3>
+            <p class="svc-desc">Organizo o que a sua marca vai dizer nas redes: o perfil, a bio e o conteúdo do feed, com uma linha clara para cada postagem.</p>
+            <div class="deliv">
+              <p class="deliv-title">O que você recebe</p>
+              <ul><li>Bio e organização do perfil</li><li>Linha editorial</li><li>Conteúdo do feed</li><li>Calendário de postagens</li></ul>
+            </div>
+            <a class="btn outline small" href="#contato" data-servico="Estratégia digital">Quero este serviço</a>
+          </div>
+          <div class="svc-media">
+            <div class="shot s3" role="img" aria-label="Espaço reservado para uma imagem de Estratégia digital"><span class="mark" aria-hidden="true">#</span><span class="shot-note">Espaço para o seu mockup</span></div>
+          </div>
+        </article>
+        <article class="svc-block">
+          <div class="svc-text">
+            <p class="eyebrow">Nas redes sociais</p>
+            <h3>Design e edições</h3>
+            <p class="svc-desc">Artes para o feed e os stories, capas de vídeo e a edição dos vídeos que você grava, sempre alinhadas à sua identidade.</p>
+            <div class="deliv">
+              <p class="deliv-title">O que você recebe</p>
+              <ul><li>Artes para o feed</li><li>Stories</li><li>Capas de vídeo</li><li>Edição de vídeos</li></ul>
+            </div>
+            <a class="btn outline small" href="#contato" data-servico="Design e edições">Quero este serviço</a>
+          </div>
+          <div class="svc-media">
+            <div class="shot s4" role="img" aria-label="Espaço reservado para uma imagem de Design e edições"><span class="mark" aria-hidden="true">@</span><span class="shot-note">Espaço para o seu mockup</span></div>
+          </div>
+        </article>
+        <article class="svc-block">
+          <div class="svc-text">
+            <p class="eyebrow">No seu espaço de trabalho</p>
+            <h3>Captação de conteúdo</h3>
+            <p class="svc-desc">Visitas ao seu local de trabalho para fotografar e filmar, para as suas redes terem imagens próprias e postagens regulares.</p>
+            <div class="deliv">
+              <p class="deliv-title">O que você recebe</p>
+              <ul><li>Fotos</li><li>Vídeos</li><li>Visitas semanais ou mensais</li><li>Imagens organizadas para as postagens</li></ul>
+            </div>
+            <a class="btn outline small" href="#contato" data-servico="Captação de conteúdo">Quero este serviço</a>
+          </div>
+          <div class="svc-media">
+            <div class="shot s1" role="img" aria-label="Espaço reservado para uma imagem de Captação de conteúdo"><span class="mark" aria-hidden="true">[ ]</span><span class="shot-note">Espaço para o seu mockup</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="toolbar band" aria-labelledby="tools-title">
+    <div class="wrap">
+      <h2 id="tools-title" class="tools-label">Ferramentas Adobe</h2>
+      <ul class="tools-list">
+        <li>Photoshop</li>
+        <li>Illustrator</li>
+        <li>Premiere Pro</li>
+      </ul>
+    </div>
+  </section>
+
+  </div>
+
+  <div data-view="portfolio" hidden>
+  <section class="port" aria-labelledby="trabalhos-title">
+    <div class="wrap">
+      <div class="port-head">
+        <div>
+          <p class="eyebrow">Galeria completa // Demont</p>
+          <h1 id="trabalhos-title">Portfólio <span class="soft">completo</span></h1>
+        </div>
+        <a class="btn outline small" href="#inicio">&larr; Voltar para a home</a>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar projetos">
+        <button type="button" class="filter" data-filter="todos" aria-pressed="true">Todos os cases</button>
+        <button type="button" class="filter" data-filter="identidade" aria-pressed="false">Identidade visual</button>
+        <button type="button" class="filter" data-filter="personalizados" aria-pressed="false">Personalizados</button>
+        <button type="button" class="filter" data-filter="redes" aria-pressed="false">Redes sociais</button>
+      </div>
+      <!-- Espaços de exemplo: troque cada .tile por uma <img> do seu projeto, ajuste data-cat e retire a etiqueta "Exemplo". -->
+      <div class="grid port-grid" id="port-grid">
+        <article class="tile t1" data-cat="identidade"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">Aa</div><div class="cap"><strong>Identidade visual</strong><span>Logo, paleta e tipografia</span></div></article>
+        <article class="tile t2" data-cat="redes"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">@</div><div class="cap"><strong>Redes sociais</strong><span>Linha de posts</span></div></article>
+        <article class="tile t3" data-cat="identidade"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">M</div><div class="cap"><strong>Monograma</strong><span>Marca pessoal</span></div></article>
+        <article class="tile t4" data-cat="redes"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">O</div><div class="cap"><strong>Destaques</strong><span>Capas do Instagram</span></div></article>
+        <article class="tile t5" data-cat="personalizados"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">Cartão</div><div class="cap"><strong>Papelaria</strong><span>Cartões e adesivos</span></div></article>
+        <article class="tile t6" data-cat="identidade"><span class="flag">Exemplo</span><div class="mark" aria-hidden="true">Manual</div><div class="cap"><strong>Manual da marca</strong><span>Regras de uso</span></div></article>
+      </div>
+      <p class="port-empty hint" id="port-empty" hidden>Em breve, novos projetos nesta categoria.</p>
+    </div>
+  </section>
+  </div>
+
+  <div data-view="sobre" hidden>
+  <section aria-labelledby="sobre-title">
+    <div class="wrap about">
+      <div class="photo"><img src="img/rafaela.jpg" width="1254" height="1254" alt="Rafaela Demontier, designer gráfica" loading="lazy"></div>
+      <div>
+        <p class="eyebrow-sm">Um pouco sobre mim</p>
+        <h2 id="sobre-title">Rafaela Demontier</h2>
+        <div class="text">
+          <p>Sou formada em Design Gráfico e trabalho com identidade visual e com a presença de marcas nas redes sociais.</p>
+          <p>Da logo ao calendário de posts, cuido para que visual e estratégia andem juntos. O resultado é uma marca que se reconhece em qualquer lugar onde aparece.</p>
+        </div>
+        <ul class="social" aria-label="Minhas redes">
+          <li><a href="https://wa.me/5511994164585" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="img/redes/whatsapp.png" width="160" height="160" alt=""></a></li>
+          <li><a href="https://www.instagram.com/demont.design/" target="_blank" rel="noopener" aria-label="Instagram"><img src="img/redes/instagram.png" width="160" height="160" alt=""></a></li>
+          <li><a href="https://www.linkedin.com/in/rafaela-santana-b302b120a/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="img/redes/linkedin.png" width="164" height="160" alt=""></a></li>
+          <li><a href="https://www.behance.net/demontdesign" target="_blank" rel="noopener" aria-label="Behance"><img src="img/redes/behance.png" width="256" height="160" alt=""></a></li>
+          <li><a href="https://br.pinterest.com/demontdsgn/" target="_blank" rel="noopener" aria-label="Pinterest"><img src="img/redes/pinterest.png" width="160" height="160" alt=""></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <section id="contato" aria-labelledby="contato-title">
+    <div class="wrap contact">
+      <div>
+        <h2 id="contato-title">Vamos conversar sobre a sua marca.</h2>
+        <div class="contact-lines">
+          <div class="line-item">
+            <span class="label">E-mail</span>
+            <span class="email" id="email-text">demontdsgn@gmail.com</span>
+            <button class="btn ghost small" type="button" id="copy-email">Copiar e-mail</button>
+          </div>
+          <div class="line-item">
+            <span class="label">WhatsApp</span>
+            <button class="btn small" type="button" id="wa-open">Chamar no WhatsApp</button>
+            <span class="hint" id="wa-note" role="status"></span>
+          </div>
+          <div class="line-item">
+            <span class="label">Instagram</span>
+            <a class="link" href="https://www.instagram.com/demont.design/" target="_blank" rel="noopener">@demont.design</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <form id="brief" novalidate>
+          <div class="field">
+            <label for="f-nome">Seu nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Como posso te chamar?">
+          </div>
+          <div class="field">
+            <label for="f-tipo">O que você precisa</label>
+            <select id="f-tipo" name="tipo">
+              <option>Identidade visual</option>
+              <option>Personalizados</option>
+              <option>Estratégia digital</option>
+              <option>Design e edições</option>
+              <option>Captação de conteúdo</option>
+              <option>Ainda não sei, quero conversar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-msg">Conte sobre o seu negócio</label>
+            <textarea id="f-msg" name="msg" placeholder="Qual é o seu negócio, para quem ele vende e o que você quer mudar?"></textarea>
+          </div>
+          <button class="btn" type="submit">Montar mensagem</button>
+        </form>
+        <div class="result" id="result" hidden>
+          <p class="hint">Copie o texto abaixo e envie para o e-mail ou no direct do Instagram.</p>
+          <textarea id="out" readonly aria-label="Mensagem pronta"></textarea>
+          <div class="actions" style="margin-top:0">
+            <button class="btn" type="button" id="wa-send">Enviar no WhatsApp</button>
+            <button class="btn ghost" type="button" id="copy-msg">Copiar mensagem</button>
+          </div>
+          <p class="status" id="status" role="status"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand"><a href="#inicio" aria-label="Demont, início"><img src="img/logo-rodape.png" width="1200" height="300" alt="Demont, identidade visual e estratégia digital"></a></div>
+      <div class="foot-info">
+        <div><span class="foot-label">Localização</span><p>São Paulo, SP</p></div>
+        <div><span class="foot-label">Contato</span><p><a href="#contato" id="foot-mail">demontdsgn@gmail.com</a></p></div>
+        <div><span class="foot-label">WhatsApp</span><p><a href="https://wa.me/5511994164585" target="_blank" rel="noopener">(11) 99416-4585</a></p></div>
+        <div><span class="foot-label">Instagram</span><p><a href="https://www.instagram.com/demont.design/" target="_blank" rel="noopener">@demont.design</a></p></div>
+        <div><a class="foot-cta" href="#contato">Quero mais informações &rarr;</a></div>
+      </div>
+      <nav class="foot-nav" aria-label="Navegação do rodapé">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#portfolio">Portfólio</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <span id="year"></span>
+      <a href="#inicio">Ir ao topo &uarr;</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
