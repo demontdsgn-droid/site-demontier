@@ -110,6 +110,8 @@ section { padding-block: clamp(3.5rem, 8vw, 7rem); }
 .btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
 .btn.ghost:hover { border-color: var(--fg); }
 .btn.small { padding: 0.7rem 1.1rem; }
+.btn-icon { gap: 0.5rem; }
+.btn-icon .ico { flex: none; display: block; }
 
 /* hero: imagem de capa (já traz o logo). Troque capa.jpg para testar outra foto. */
 .hero-full {

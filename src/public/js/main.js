@@ -101,8 +101,10 @@
     copyText($('email-text').textContent, { focus: function(){}, select: function () {
       var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
     } }, function (ok) {
-      copyBtn.textContent = ok ? 'E-mail copiado' : 'Selecionado, copie com Ctrl+C';
-      setTimeout(function () { copyBtn.textContent = 'Copiar e-mail'; }, 2500);
+      var ico = $('copy-email-ico'), label = $('copy-email-label'), iconCopy = ico.innerHTML;
+      label.textContent = ok ? 'E-mail copiado' : 'Selecionado, copie com Ctrl+C';
+      if (ok) ico.innerHTML = '<path d="M5 12.5l4.5 4.5L19 7.5"/>';
+      setTimeout(function () { label.textContent = 'Copiar e-mail'; ico.innerHTML = iconCopy; }, 2500);
     });
   });
 
