@@ -257,6 +257,7 @@ input:hover, select:hover, textarea:hover { border-color: var(--fg); }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--fg); box-shadow: 0 0 0 3px var(--line); }
 textarea { min-height: 7.5rem; resize: vertical; }
 .result { display: grid; gap: 0.75rem; }
+.result[hidden] { display: none; }
 .result textarea { min-height: 9rem; }
 .hint { font-size: var(--step--1); color: var(--muted); }
 .status { font-size: var(--step--1); min-height: 1.4em; }
