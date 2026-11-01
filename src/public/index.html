@@ -307,7 +307,7 @@
         <form id="brief" novalidate>
           <div class="field">
             <label for="f-nome">Seu nome</label>
-            <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Como posso te chamar?">
+            <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Digite o seu nome">
           </div>
           <div class="field">
             <label for="f-tipo">O que você precisa</label>
@@ -320,17 +320,9 @@
               <option>Ainda não sei, quero conversar</option>
             </select>
           </div>
-          <button class="btn" type="submit">Montar mensagem</button>
+          <button class="btn" type="submit">Falar no WhatsApp</button>
         </form>
-        <div class="result" id="result" hidden>
-          <p class="hint">Confira a mensagem, escreva o que quiser acrescentar e envie pelo WhatsApp.</p>
-          <textarea id="out" aria-label="Mensagem pronta"></textarea>
-          <div class="actions" style="margin-top:0">
-            <button class="btn" type="button" id="wa-send">Enviar no WhatsApp</button>
-            <button class="btn ghost" type="button" id="copy-msg">Copiar mensagem</button>
-          </div>
-          <p class="status" id="status" role="status"></p>
-        </div>
+        <p class="status" id="status" role="status"></p>
       </div>
     </div>
   </section>

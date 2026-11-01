@@ -115,10 +115,7 @@
     var texto = 'Olá, Rafaela! ' + (nome ? 'Meu nome é ' + nome + '. ' : '') +
       'Tenho interesse em: ' + tipo + '.' +
       '\n\nPode me passar um orçamento?';
-    $('out').value = texto;
-    $('result').hidden = false;
-    $('status').textContent = '';
-    $('out').focus();
+    openWhats(texto, $('status'));
   });
 
   // Coloque o número com país e DDD, só dígitos. Exemplo: '5511999999999'
@@ -134,14 +131,5 @@
   }
   $('wa-open').addEventListener('click', function () {
     openWhats('Olá, Rafaela! Vi o seu site e quero conversar sobre um projeto.', $('wa-note'));
-  });
-  $('wa-send').addEventListener('click', function () {
-    openWhats($('out').value, $('status'));
-  });
-
-  $('copy-msg').addEventListener('click', function () {
-    copyText($('out').value, $('out'), function (ok) {
-      $('status').textContent = ok ? 'Mensagem copiada.' : 'Não foi possível copiar sozinho. O texto está selecionado, use Ctrl+C.';
-    });
   });
 })();
