@@ -112,9 +112,8 @@
     e.preventDefault();
     var nome = $('f-nome').value.trim();
     var tipo = $('f-tipo').value;
-    var msg = $('f-msg').value.trim();
     var texto = 'Olá, Rafaela! ' + (nome ? 'Meu nome é ' + nome + '. ' : '') +
-      'Tenho interesse em: ' + tipo + '.' + (msg ? '\n\n' + msg : '') +
+      'Tenho interesse em: ' + tipo + '.' +
       '\n\nPode me passar um orçamento?';
     $('out').value = texto;
     $('result').hidden = false;
