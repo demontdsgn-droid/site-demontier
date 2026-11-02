@@ -10,10 +10,10 @@
 
   var SITE = 'https://www.demontdesign.com.br';
   var META = {
-    inicio: ['Demont Designer | Identidade visual e estratégia digital', 'Identidade visual e estratégia digital para marcas, por Rafaela Demontier, designer gráfica em São Paulo.'],
-    servicos: ['Serviços | Demont Designer', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
-    sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Designer', 'Rafaela Demontier é designer gráfica em São Paulo e trabalha com identidade visual e com a presença de marcas nas redes sociais.'],
-    portfolio: ['Portfólio | Demont Designer', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
+    inicio: ['Demont Design | Identidade visual e estratégia digital', 'Identidade visual e estratégia digital para marcas, por Rafaela Demontier, designer gráfica, com atendimento em São Paulo e no Vale do Paraíba.'],
+    servicos: ['Serviços | Demont Design', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
+    sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Design', 'Rafaela Demontier é designer gráfica e atende São Paulo e o Vale do Paraíba, com identidade visual e presença de marcas nas redes sociais.'],
+    portfolio: ['Portfólio | Demont Design', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
   };
   function urlFor(v) { return v === 'inicio' ? '/' : '/' + v + '/'; }
   function pathView() {

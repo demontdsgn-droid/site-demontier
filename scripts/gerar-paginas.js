@@ -8,9 +8,9 @@ const PUBLIC = path.join(__dirname, '..', 'src', 'public');
 const home = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8');
 
 const PAGES = {
-  servicos: ['Serviços | Demont Designer', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
-  sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Designer', 'Rafaela Demontier é designer gráfica em São Paulo e trabalha com identidade visual e com a presença de marcas nas redes sociais.'],
-  portfolio: ['Portfólio | Demont Designer', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
+  servicos: ['Serviços | Demont Design', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
+  sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Design', 'Rafaela Demontier é designer gráfica e atende São Paulo e o Vale do Paraíba, com identidade visual e presença de marcas nas redes sociais.'],
+  portfolio: ['Portfólio | Demont Design', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
 };
 
 function troca(html, regex, novo) {
