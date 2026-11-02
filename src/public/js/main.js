@@ -8,6 +8,28 @@
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
   var currentView = null;
 
+  var SITE = 'https://www.demontdesign.com.br';
+  var META = {
+    inicio: ['Demont Designer | Identidade visual e estratégia digital', 'Identidade visual e estratégia digital para marcas, por Rafaela Demontier, designer gráfica em São Paulo.'],
+    servicos: ['Serviços | Demont Designer', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
+    sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Designer', 'Rafaela Demontier é designer gráfica em São Paulo e trabalha com identidade visual e com a presença de marcas nas redes sociais.'],
+    portfolio: ['Portfólio | Demont Designer', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
+  };
+  function urlFor(v) { return v === 'inicio' ? '/' : '/' + v + '/'; }
+  function pathView() {
+    var p = location.pathname.replace(/index\.html$/, '').replace(/^\/+|\/+$/g, '');
+    return p === '' ? 'inicio' : (VIEWS.indexOf(p) > -1 ? p : null);
+  }
+  function setMeta(v) {
+    var m = META[v]; if (!m) return;
+    document.title = m[0];
+    var set = function (sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+    set('meta[name="description"]', 'content', m[1]);
+    set('link[rel="canonical"]', 'href', SITE + urlFor(v));
+    set('meta[property="og:title"]', 'content', m[0]);
+    set('meta[property="og:description"]', 'content', m[1]);
+    set('meta[property="og:url"]', 'content', SITE + urlFor(v));
+  }
   function show(v) {
     currentView = v;
     panes.forEach(function (p) { p.hidden = p.getAttribute('data-view') !== v; });
@@ -15,27 +37,39 @@
       if (a.getAttribute('data-nav') === v) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
+    setMeta(v);
   }
   function apply() {
     var h = (location.hash || '').slice(1);
-    var view = VIEWS.indexOf(h) > -1 ? h : ANCHOR_VIEW[h];
+    var legacy = VIEWS.indexOf(h) > -1 ? h : ANCHOR_VIEW[h];
+    var view = legacy || (currentView ? null : (pathView() || 'inicio'));
+    if (legacy && history.replaceState) history.replaceState(null, '', urlFor(legacy));
     if (view) show(view);
-    else if (!currentView) show('inicio');
-    var target = VIEWS.indexOf(h) > -1 || !h ? null : document.getElementById(h);
+    var target = legacy || !h ? null : document.getElementById(h);
     if (target) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     else window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', apply);
+  window.addEventListener('popstate', function () { show(pathView() || 'inicio'); window.scrollTo(0, 0); });
+  // links entre as páginas (/servicos/, /sobre/...) trocam a aba sem recarregar; sem JS, abrem a página própria
   document.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
-    if (a && a.getAttribute('href') === (location.hash || '#inicio')) { e.preventDefault(); apply(); }
+    var a = e.target.closest ? e.target.closest('a[href^="/"]') : null;
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    var m = /^\/(servicos|sobre|portfolio)?\/?$/.exec(a.getAttribute('href'));
+    if (!m || !history.pushState) return;
+    e.preventDefault();
+    var v = m[1] || 'inicio';
+    if (pathView() !== v) history.pushState(null, '', urlFor(v));
+    show(v);
+    window.dispatchEvent(new Event('hashchange-close'));
+    window.scrollTo(0, 0);
   });
   apply();
 
 
   // projetos dos clientes: cada um abre uma página com a galeria (adicione imagens em "imgs")
   (function () {
-    var P = 'img/portfolio/';
+    var P = '/img/portfolio/';
     var CASES = {
       nl: { name: 'Negócio Lotado', niche: 'Marketing', imgs: [
         [P + 'negocio-lotado-identidade.jpg', 'Caneca, cartão, caderno e caneta do Negócio Lotado em laranja e preto', 'Brindes e papelaria'],
@@ -108,7 +142,7 @@
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
-    window.addEventListener('hashchange', function () { if (!box.hidden) close(); });
+    ['hashchange', 'popstate', 'hashchange-close'].forEach(function (ev) { window.addEventListener(ev, function () { if (!box.hidden) close(); }); });
   })();
 
   // carrossel da home
