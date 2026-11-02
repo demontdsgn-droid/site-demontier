@@ -1,7 +1,7 @@
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   // abas: Início, Serviços e Sobre ficam no mesmo arquivo e trocam pelo endereço (#servicos, #sobre)
-  var VIEWS = ['inicio', 'servicos', 'sobre', 'portfolio'];
+  var VIEWS = ['inicio', 'servicos', 'sobre', 'portfolio', 'privacidade'];
   var ANCHOR_VIEW = { projetos: 'portfolio' };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var panes = Array.prototype.slice.call(document.querySelectorAll('[data-view]'));
@@ -13,6 +13,7 @@
     inicio: ['Demont Design | Identidade visual e estratégia digital', 'Identidade visual e estratégia digital para marcas, por Rafaela Demontier, designer gráfica, com atendimento em São Paulo e no Vale do Paraíba.'],
     servicos: ['Serviços | Demont Design', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
     sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Design', 'Rafaela Demontier é designer gráfica e atende São Paulo e o Vale do Paraíba, com identidade visual e presença de marcas nas redes sociais.'],
+    privacidade: ['Política de privacidade | Demont Design', 'Como a Demont Design trata os dados de quem visita o site e entra em contato.'],
     portfolio: ['Portfólio | Demont Design', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
   };
   function urlFor(v) { return v === 'inicio' ? '/' : '/' + v + '/'; }
@@ -55,7 +56,7 @@
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('a[href^="/"]') : null;
     if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
-    var m = /^\/(servicos|sobre|portfolio)?\/?$/.exec(a.getAttribute('href'));
+    var m = /^\/(servicos|sobre|portfolio|privacidade)?\/?$/.exec(a.getAttribute('href'));
     if (!m || !history.pushState) return;
     e.preventDefault();
     var v = m[1] || 'inicio';
@@ -173,6 +174,23 @@
   })();
 
   var servicoEscolhido = '';
+
+  // aviso de cookies: a escolha fica no navegador; ferramentas de medição só devem iniciar depois do aceite
+  (function () {
+    var KEY = 'demont-cookies', box = $('consent');
+    var read = function () { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
+    var save = function (v) { try { localStorage.setItem(KEY, v); } catch (e) {} };
+    function decide(v) {
+      save(v);
+      box.hidden = true;
+      window.dispatchEvent(new CustomEvent('demont-consent', { detail: v }));
+    }
+    $('consent-yes').addEventListener('click', function () { decide('aceito'); });
+    $('consent-no').addEventListener('click', function () { decide('recusado'); });
+    $('cookies-reopen').addEventListener('click', function () { box.hidden = false; $('consent-yes').focus(); });
+    if (!read()) box.hidden = false;
+  })();
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('[data-servico]') : null;
     if (!a) return;

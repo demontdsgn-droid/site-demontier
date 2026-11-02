@@ -454,3 +454,22 @@ body.case-open { overflow: hidden; }
 .contact-icons { margin-top: 1.75rem; display: flex; justify-content: center; gap: 0.9rem; }
 .contact-icons .ic { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--fg); padding: 0; cursor: pointer; transition: border-color .2s ease, background-color .2s ease, color .2s ease; }
 .contact-icons .ic:hover, .contact-icons .ic:focus-visible { border-color: var(--fg); }
+
+/* política de privacidade e aviso de cookies */
+.legal-wrap { max-width: 46rem; padding-block: clamp(2rem, 6vw, 4rem); }
+.legal h2 { font-size: var(--step-3); font-weight: 300; margin-block: 0.25rem 0.5rem; }
+.legal-date { color: var(--muted); font-size: var(--step--1); margin-bottom: 2rem; }
+.legal h3 { font-family: var(--font-body); font-size: var(--step-1); font-weight: 500; margin: 2rem 0 0.5rem; }
+.legal p, .legal li { color: var(--fg); line-height: 1.7; }
+.legal ul { padding-left: 1.25rem; display: grid; gap: 0.6rem; }
+.legal a:not(.btn) { text-decoration: underline; text-underline-offset: 0.25em; text-decoration-color: var(--line); }
+.legal-back { margin-top: 2.5rem; }
+.foot-legal { display: inline-flex; gap: 1rem; flex-wrap: wrap; }
+.foot-legal a, .foot-cookies { color: inherit; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 0.25em; text-decoration-color: rgba(241,227,209,.35); }
+.foot-legal a:hover, .foot-cookies:hover { text-decoration-color: currentColor; }
+.consent { position: fixed; left: max(1rem, env(safe-area-inset-left, 0px)); right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px)); z-index: 40; display: grid; gap: 0.9rem; padding: 1.1rem 1.25rem; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); font-size: var(--step--1); line-height: 1.55; }
+.consent[hidden] { display: none; }
+.consent p { margin: 0; }
+.consent a { text-decoration: underline; text-underline-offset: 0.25em; }
+.consent-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
+@media (min-width: 40rem) { .consent { right: auto; max-width: 27rem; } }

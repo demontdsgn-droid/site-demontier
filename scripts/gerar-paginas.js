@@ -10,6 +10,7 @@ const home = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8');
 const PAGES = {
   servicos: ['Serviços | Demont Design', 'Identidade visual, personalizados, estratégia digital e captação de conteúdo para a sua marca. Conheça os serviços da Demont.'],
   sobre: ['Sobre | Rafaela Demontier, designer gráfica | Demont Design', 'Rafaela Demontier é designer gráfica e atende São Paulo e o Vale do Paraíba, com identidade visual e presença de marcas nas redes sociais.'],
+  privacidade: ['Política de privacidade | Demont Design', 'Como a Demont Design trata os dados de quem visita o site e entra em contato.'],
   portfolio: ['Portfólio | Demont Design', 'Projetos de identidade visual e redes sociais para o Negócio Lotado, a Aline Naves, a Free Tecnologia e a CB Projeto Estrutural.']
 };
 
@@ -32,7 +33,7 @@ for (const [slug, [title, desc]] of Object.entries(PAGES)) {
 }
 
 const hoje = new Date().toISOString().slice(0, 10);
-const urls = ['/', '/servicos/', '/portfolio/', '/sobre/'];
+const urls = ['/', '/servicos/', '/portfolio/', '/sobre/', '/privacidade/'];
 fs.writeFileSync(path.join(PUBLIC, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(u => '  <url><loc>' + SITE + u + '</loc><lastmod>' + hoje + '</lastmod></url>').join('\n') + '\n</urlset>\n');
