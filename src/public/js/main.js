@@ -32,17 +32,83 @@
   });
   apply();
 
-  // filtros do portfólio
+
+  // projetos dos clientes: cada um abre uma página com a galeria (adicione imagens em "imgs")
   (function () {
-    var btns = document.querySelectorAll('.filter'), tiles = document.querySelectorAll('#port-grid .tile'), empty = $('port-empty');
-    Array.prototype.forEach.call(btns, function (b) {
-      b.addEventListener('click', function () {
-        var f = b.getAttribute('data-filter'), n = 0;
-        Array.prototype.forEach.call(btns, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-        Array.prototype.forEach.call(tiles, function (t) { var ok = f === 'todos' || t.getAttribute('data-cat') === f; t.hidden = !ok; if (ok) n++; });
-        empty.hidden = n > 0;
-      });
+    var P = 'img/portfolio/';
+    var CASES = {
+      nl: { name: 'Negócio Lotado', niche: 'Marketing', imgs: [
+        [P + 'negocio-lotado-identidade.jpg', 'Caneca, cartão, caderno e caneta do Negócio Lotado em laranja e preto', 'Brindes e papelaria'],
+        [P + 'negocio-lotado-cartoes.jpg', 'Cartões de visita laranja e branco do Negócio Lotado sobre concreto', 'Cartão de visita'],
+        [P + 'negocio-lotado-brindes.jpg', 'Garrafa térmica e boné bege com a logo do Negócio Lotado bordada em laranja', 'Garrafa e boné'],
+        [P + 'negocio-lotado-cracha.jpg', 'Crachá preto com cordão estampado e a logo do Negócio Lotado em laranja', 'Crachá'],
+        [P + 'negocio-lotado-instagram.jpg', 'Post do Instagram @negociolotado com o símbolo NL em branco sobre fundo laranja', 'Redes sociais'],
+        [P + 'negocio-lotado.jpg', 'Papelaria laranja e branca com a logo do Negócio Lotado', 'Papelaria']] },
+      aline: { name: 'Aline Naves', niche: 'Comportamento e alta performance', imgs: [
+        [P + 'aline-naves-simbolo.jpg', 'Símbolo da Aline Naves em relevo dourado fosco sobre papel preto', 'Símbolo'],
+        [P + 'aline-naves.jpg', 'Caneca de cerâmica bege e preta com a logo da Aline Naves', 'Brindes'],
+        [P + 'aline-naves-papelaria.jpg', 'Papelaria da Aline Naves em preto e bege: caderno, pasta, cartões de visita e caneta', 'Papelaria'],
+        [P + 'aline-naves-cartao.jpg', 'Cartão de visita preto da Aline Naves sobre uma superfície clara, ao lado de madeira', 'Cartão de visita'],
+        [P + 'aline-naves-sacola.jpg', 'Sacola de tecido bege com a logo da Aline Naves, carregada por uma mulher de roupa preta', 'Sacola'],
+        [P + 'aline-naves-instagram.jpg', 'Post do Instagram da Aline Naves em preto com o símbolo da marca em relevo', 'Redes sociais']] },
+      free: { name: 'Free Tecnologia', niche: 'IA e engenharia de software', imgs: [
+        [P + 'free-tecnologia-cartao.jpg', 'Cartão de visita da Free Tecnologia segurado em mãos, com logo em relevo azul', 'Cartão de visita'],
+        [P + 'free-tecnologia-site.jpg', 'Notebook com o site da Free Tecnologia, IA e software sob medida, em tela azul escura', 'Site'],
+        [P + 'free-tecnologia-caneca.jpg', 'Caneca branca com alça azul e a logo da Free Tecnologia', 'Caneca'],
+        [P + 'free-tecnologia-copo.jpg', 'Copo térmico bege com tampa azul, logo e contatos da Free Tecnologia', 'Copo térmico'],
+        [P + 'free-tecnologia-instagram.jpg', 'Post do Instagram @free_tecnologia com o símbolo da marca em azul sobre fundo preto', 'Redes sociais'],
+        [P + 'free-tecnologia-perfil-card.jpg', 'Perfil do Instagram @free_tecnologia com bio, destaques e primeiros posts', 'Redes sociais'],
+        [P + 'free-tecnologia-papel.jpg', 'Logo da Free Tecnologia impressa em papel texturizado', 'Papelaria']] },
+      cb: { name: 'CB Projeto Estrutural', niche: 'Engenharia', imgs: [
+        [P + 'cb-projeto-estrutural.jpg', 'Cartão de visita da CB Projeto Estrutural sobre uma pedra', 'Cartão de visita'],
+        [P + 'cb-projeto-estrutural-instagram.jpg', 'Post do Instagram @cbprojetoestrutural com o símbolo CB em preto sobre fundo amarelo', 'Redes sociais'],
+        [P + 'cb-projeto-estrutural-papelaria.jpg', 'Caderno de capa preta com elástico amarelo e caneta amarela com a logo da CB Projeto Estrutural', 'Caderno e caneta'],
+        [P + 'cb-projeto-estrutural-capacete.jpg', 'Capacete de obra branco com a logo da CB Projeto Estrutural', 'Capacete']] }
+    };
+    Array.prototype.forEach.call(document.querySelectorAll('.case-card'), function (card) {
+      var c = CASES[card.getAttribute('data-case')], n = c ? c.imgs.length : 0, el = card.querySelector('.count');
+      if (el && n) el.textContent = n + (n === 1 ? ' peça' : ' peças');
     });
+    var box = $('case'); if (!box) return;
+    var main = $('case-img'), thumbs = $('case-thumbs'), gallery = $('case-gallery'), opener = null, cur = null, idx = 0;
+    function pick(i) {
+      idx = i; var im = cur.imgs[i];
+      main.src = im[0]; main.alt = im[1]; $('case-tag').textContent = im[2];
+      Array.prototype.forEach.call(thumbs.children, function (b, k) { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    }
+    function open(id, from) {
+      cur = CASES[id]; if (!cur) return; opener = from;
+      $('case-cat').textContent = cur.imgs.map(function (m) { return m[2]; }).filter(function (t, k, a) { return a.indexOf(t) === k; }).join(' \u00b7 '); $('case-name').textContent = cur.name; $('case-niche').textContent = cur.niche;
+      thumbs.innerHTML = '';
+      cur.imgs.forEach(function (im, k) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'case-thumb';
+        b.setAttribute('aria-label', 'Ver imagem ' + (k + 1) + ' de ' + cur.imgs.length);
+        var t = document.createElement('img'); t.src = im[0]; t.alt = ''; t.width = 300; t.height = 240; t.loading = 'lazy';
+        b.appendChild(t); b.addEventListener('click', function () { pick(k); }); thumbs.appendChild(b);
+      });
+      gallery.hidden = cur.imgs.length < 2;
+      pick(0); box.hidden = false; document.body.classList.add('case-open');
+      box.querySelector('.case-close').focus();
+    }
+    function close() { box.hidden = true; document.body.classList.remove('case-open'); if (opener) opener.focus(); }
+    document.addEventListener('click', function (e) {
+      var card = e.target.closest ? e.target.closest('[data-case]') : null;
+      if (card) { open(card.getAttribute('data-case'), card); return; }
+      if (e.target.closest && e.target.closest('[data-close]')) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'ArrowRight' && cur.imgs.length > 1) pick((idx + 1) % cur.imgs.length);
+      if (e.key === 'ArrowLeft' && cur.imgs.length > 1) pick((idx - 1 + cur.imgs.length) % cur.imgs.length);
+      if (e.key === 'Tab') {
+        var f = box.querySelectorAll('button:not([hidden])'); if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    window.addEventListener('hashchange', function () { if (!box.hidden) close(); });
   })();
 
   // carrossel da home
@@ -72,11 +138,11 @@
     update();
   })();
 
+  var servicoEscolhido = '';
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('[data-servico]') : null;
     if (!a) return;
-    var sel = $('f-tipo'), nome = a.getAttribute('data-servico');
-    for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].text === nome) { sel.selectedIndex = i; break; } }
+    servicoEscolhido = a.getAttribute('data-servico');
   });
   var header = $('header');
   function onScroll() { header.classList.toggle('scrolled', window.scrollY > 8); }
@@ -108,16 +174,6 @@
     });
   });
 
-  $('brief').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var nome = $('f-nome').value.trim();
-    var tipo = $('f-tipo').value;
-    var texto = 'Olá, Rafaela! ' + (nome ? 'Meu nome é ' + nome + '. ' : '') +
-      'Tenho interesse em: ' + tipo + '.' +
-      '\n\nPode me passar um orçamento?';
-    openWhats(texto, $('status'));
-  });
-
   // Coloque o número com país e DDD, só dígitos. Exemplo: '5511999999999'
   var WHATSAPP = '5511994164585';
 
@@ -130,6 +186,6 @@
     window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
   }
   $('wa-open').addEventListener('click', function () {
-    openWhats('Olá, Rafaela! Vi o seu site e quero conversar sobre um projeto.', $('wa-note'));
+    openWhats('Olá, Rafaela! Vi o seu site e quero conversar sobre ' + (servicoEscolhido ? 'o serviço de ' + servicoEscolhido + '.' : 'um projeto.'), $('wa-note'));
   });
 })();
