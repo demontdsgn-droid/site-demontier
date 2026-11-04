@@ -495,5 +495,9 @@ body.case-open { overflow: hidden; }
 .chat-send:disabled { opacity: .5; cursor: default; }
 .chat-note { margin: 0; padding: 0 .8rem .6rem; font-size: .72rem; color: var(--muted); text-align: center; }
 @media (max-width: 40rem) {
-  .chat-panel { right: 0; left: 0; bottom: 0; width: auto; height: min(34rem, 80vh); border-radius: 1rem 1rem 0 0; }
+  .chat-panel { right: .75rem; left: .75rem; bottom: .75rem; width: auto; height: min(22rem, 58vh); height: min(22rem, 58dvh); border-radius: 1rem; }
+  .chat-head { padding: .6rem .9rem; }
+  .chat-msgs { padding: .7rem; }
+  .chat-msg { font-size: .88rem; }
+  .chat-note { display: none; }
 }
