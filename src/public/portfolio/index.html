@@ -358,7 +358,7 @@
       <div class="wrap legal-wrap">
         <p class="eyebrow">Transparência</p>
         <h2 id="priv-title">Política de privacidade</h2>
-        <p class="legal-date">Última atualização: 3 de novembro de 2026.</p>
+        <p class="legal-date">Última atualização: 16 de novembro de 2026.</p>
 
         <h3>Quem somos</h3>
         <p>Este site é da Demont Design, nome de fantasia de 54.350.279 Rafaela da Costa Santana (CNPJ 54.350.279/0001-62), com sede em São Paulo, SP. A responsável é Rafaela Demontier, designer gráfica. É ela quem decide como os dados deste site são usados. Para falar sobre privacidade, escreva para <a href="mailto:demontdsgn@gmail.com">demontdsgn@gmail.com</a>.</p>
@@ -367,6 +367,7 @@
         <ul>
           <li><strong>Conversas pelo WhatsApp.</strong> Ao clicar no botão do WhatsApp, a conversa acontece no aplicativo, com as regras dele. Recebemos o seu número e o que você escrever.</li>
           <li><strong>Chat com a Dora.</strong> As mensagens que você escrever no chat são enviadas à Cloudflare, que repassa o texto ao assistente virtual (plataforma Chat-IA, da Free Tecnologia), para gerar a resposta. Não escreva dados pessoais sensíveis no chat. Guardamos no seu navegador, só enquanto a aba estiver aberta, o código da conversa.</li>
+          <li><strong>Pedido de orçamento.</strong> Se você preencher o formulário da seção Contato, guardamos o seu nome, WhatsApp, o serviço escolhido e a mensagem, só para responder ao seu pedido. Eles ficam no sistema de atendimento da Demont Design, hospedado na Cloudflare. Para apagar, é só pedir pelo e-mail abaixo.</li>
           <li><strong>E-mail.</strong> Se você escrever para o e-mail do site, guardamos a mensagem para responder.</li>
           <li><strong>Dados de navegação.</strong> O site carrega a fonte Outfit pelo Google Fonts. Por isso, o Google recebe o seu endereço IP quando a página abre.</li>
           <li><strong>Sua escolha de cookies.</strong> Guardamos no seu navegador se você aceitou ou recusou, para não perguntar de novo.</li>
@@ -400,6 +401,25 @@
       <h2 id="contato-title">Vamos conversar sobre o seu projeto.</h2>
       <button class="btn wa-big" type="button" id="wa-open">Chamar no WhatsApp</button>
       <span class="hint" id="wa-note" role="status"></span>
+      <div class="orc-ou" aria-hidden="true"><span>ou peça um orçamento</span></div>
+      <form class="orc" id="orc-form" novalidate>
+        <label>Seu nome<input type="text" name="nome" autocomplete="name" maxlength="80" required></label>
+        <label>Seu WhatsApp com DDD<input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="(11) 90000-0000" required></label>
+        <label>O que você precisa?
+          <select name="servico">
+            <option value="">Escolha uma opção</option>
+            <option>Identidade visual</option>
+            <option>Redes sociais</option>
+            <option>Papelaria e materiais</option>
+            <option>Outro</option>
+          </select>
+        </label>
+        <label>Quer contar mais? (opcional)<textarea name="mensagem" rows="3" maxlength="600"></textarea></label>
+        <input class="orc-isca" type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn" type="submit" id="orc-btn">Pedir orçamento</button>
+        <p class="orc-nota">Usamos só para responder o seu pedido. <a href="/privacidade/">Política de privacidade</a>.</p>
+        <p class="hint" id="orc-msg" role="status"></p>
+      </form>
       <div class="contact-icons">
         <button class="ic" type="button" id="copy-email" aria-label="Copiar e-mail demontdsgn@gmail.com" title="Copiar e-mail">
           <svg class="ico" id="copy-email-ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>

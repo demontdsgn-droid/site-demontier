@@ -503,3 +503,16 @@ body.case-open { overflow: hidden; }
 }
 
 .foot-empresa { margin: 0; padding-top: 1.5rem; font-size: 0.75rem; letter-spacing: .04em; color: rgba(241,227,209,.6); }
+
+/* formulário de orçamento */
+.orc-ou { width: 100%; max-width: 30rem; display: flex; align-items: center; gap: 1rem; margin: 2.25rem 0 1.25rem; color: var(--muted); font-size: 0.9rem; }
+.orc-ou::before, .orc-ou::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+.orc { width: 100%; max-width: 30rem; display: grid; gap: 1rem; text-align: left; }
+.orc label { display: grid; gap: 0.35rem; font-size: 0.9rem; color: var(--muted); }
+.orc input, .orc select, .orc textarea { font: inherit; font-size: 1rem; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 0.7rem; padding: 0.75rem 0.9rem; width: 100%; }
+.orc input:focus, .orc select:focus, .orc textarea:focus { outline: 2px solid var(--fg); outline-offset: 1px; }
+.orc .btn { justify-self: start; white-space: nowrap; }
+.orc-isca { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.orc-nota { font-size: 0.82rem; color: var(--muted); margin: 0; }
+.orc-nota a { color: inherit; text-decoration: underline; }
+#orc-msg { margin: 0; text-align: left; }

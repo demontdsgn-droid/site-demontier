@@ -241,3 +241,22 @@
     openWhats('Olá, Rafaela! Vi o seu site e quero conversar sobre ' + (servicoEscolhido ? 'o serviço de ' + servicoEscolhido + '.' : 'um projeto.'), $('wa-note'));
   });
 })();
+
+(function () {
+  var f = document.getElementById('orc-form'); if (!f) return;
+  var msg = document.getElementById('orc-msg'), btn = document.getElementById('orc-btn');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var d = { nome: f.nome.value.trim(), whatsapp: f.whatsapp.value.trim(), servico: f.servico.value, mensagem: f.mensagem.value.trim(), site: f.site.value };
+    if (d.nome.length < 2) { msg.textContent = 'Escreva o seu nome.'; f.nome.focus(); return; }
+    if (d.whatsapp.replace(/\D/g, '').length < 10) { msg.textContent = 'Escreva o seu WhatsApp com DDD.'; f.whatsapp.focus(); return; }
+    btn.disabled = true; msg.textContent = 'Enviando…';
+    fetch('https://portal.demontdesign.com.br/api/site/contato', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (x.ok) { f.reset(); msg.textContent = 'Recebi o seu pedido, obrigada! Eu respondo pelo WhatsApp em breve.'; }
+        else { btn.disabled = false; msg.textContent = (x.j && x.j.erro) || 'Não consegui enviar. Tente de novo ou chame pelo WhatsApp.'; }
+      })
+      .catch(function () { btn.disabled = false; msg.textContent = 'Não consegui enviar. Tente de novo ou chame pelo WhatsApp.'; });
+  });
+})();
