@@ -266,7 +266,11 @@
     fetch('https://portal.demontdesign.com.br/api/site/contato', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (x) {
-        if (x.ok) { f.reset(); msg.textContent = 'Recebi o seu pedido, obrigada! Eu respondo pelo WhatsApp em breve.'; }
+        if (x.ok) {
+          // conta o pedido no Google Analytics (só com cookies aceitos; sem nome nem telefone)
+          try { if (localStorage.getItem('demont-cookies') === 'aceito') { window.dataLayer = window.dataLayer || []; (function () { window.dataLayer.push(arguments); })('event', 'generate_lead', { form: 'orcamento', servico: d.servico || '' }); } } catch (e) {}
+          f.reset(); msg.textContent = 'Recebi o seu pedido, obrigada! Eu respondo pelo WhatsApp em breve.';
+        }
         else { btn.disabled = false; msg.textContent = (x.j && x.j.erro) || 'Não consegui enviar. Tente de novo ou chame pelo WhatsApp.'; }
       })
       .catch(function () { btn.disabled = false; msg.textContent = 'Não consegui enviar. Tente de novo ou chame pelo WhatsApp.'; });
