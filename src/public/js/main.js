@@ -180,8 +180,20 @@
     var KEY = 'demont-cookies', box = $('consent');
     var read = function () { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
     var save = function (v) { try { localStorage.setItem(KEY, v); } catch (e) {} };
+    // Google Analytics (tag do Google): só carrega depois que a pessoa aceita os cookies
+    var tagCarregada = false;
+    function carregaTag() {
+      if (tagCarregada) return; tagCarregada = true;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var s = document.createElement('script'); s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-TP2RLD5D';
+      document.head.appendChild(s);
+    }
+    if (read() === 'aceito') carregaTag();
     function decide(v) {
       save(v);
+      if (v === 'aceito') carregaTag();
       box.hidden = true;
       window.dispatchEvent(new CustomEvent('demont-consent', { detail: v }));
     }
