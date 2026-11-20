@@ -185,9 +185,11 @@
     function carregaTag() {
       if (tagCarregada) return; tagCarregada = true;
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-WVJBBPF6HR');
       var s = document.createElement('script'); s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-TP2RLD5D';
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-WVJBBPF6HR';
       document.head.appendChild(s);
     }
     if (read() === 'aceito') carregaTag();
@@ -268,7 +270,7 @@
       .then(function (x) {
         if (x.ok) {
           // conta o pedido no Google Analytics (só com cookies aceitos; sem nome nem telefone)
-          try { if (localStorage.getItem('demont-cookies') === 'aceito') { window.dataLayer = window.dataLayer || []; (function () { window.dataLayer.push(arguments); })('event', 'generate_lead', { form: 'orcamento', servico: d.servico || '' }); } } catch (e) {}
+          try { if (localStorage.getItem('demont-cookies') === 'aceito' && window.gtag) window.gtag('event', 'generate_lead', { form: 'orcamento', servico: d.servico || '' }); } catch (e) {}
           f.reset(); msg.textContent = 'Recebi o seu pedido, obrigada! Eu respondo pelo WhatsApp em breve.';
         }
         else { btn.disabled = false; msg.textContent = (x.j && x.j.erro) || 'Não consegui enviar. Tente de novo ou chame pelo WhatsApp.'; }
