@@ -1,1 +1,6 @@
 node_modules/
+
+# o painel tem repositório próprio e privado: nunca entra neste repositório público
+aprovacao/
+dora-webhook-chave.txt
+ig-webhook-codigo.txt

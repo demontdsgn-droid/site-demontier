@@ -461,7 +461,7 @@ body.case-open { overflow: hidden; }
 .legal-date { color: var(--muted); font-size: var(--step--1); margin-bottom: 2rem; }
 .legal h3 { font-family: var(--font-body); font-size: var(--step-1); font-weight: 500; margin: 2rem 0 0.5rem; }
 .legal p, .legal li { color: var(--fg); line-height: 1.7; }
-.legal ul { padding-left: 1.25rem; display: grid; gap: 0.6rem; }
+.legal ul, .legal ol { padding-left: 1.25rem; display: grid; gap: 0.6rem; }
 .legal a:not(.btn) { text-decoration: underline; text-underline-offset: 0.25em; text-decoration-color: var(--line); }
 .legal-back { margin-top: 2.5rem; }
 .foot-legal { display: inline-flex; gap: 1rem; flex-wrap: wrap; }
