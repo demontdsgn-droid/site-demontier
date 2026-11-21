@@ -71,14 +71,17 @@
   // Botões de resposta rápida. Ficam no fim da conversa e somem quando a pessoa escolhe (ou digita).
   var opts = null;
   function limparOpcoes() { if (opts && opts.parentNode) opts.parentNode.removeChild(opts); opts = null; }
+  // lista: textos simples, ou {label, id, description} (opções da agenda: mostra o rótulo e envia o id)
   function mostrarOpcoes(lista) {
     limparOpcoes();
     if (!lista.length) return;
     opts = el('div', 'chat-opts');
-    lista.slice(0, 4).forEach(function (t) {
-      var b = el('button', 'chat-opt', t);
+    lista.slice(0, 14).forEach(function (o) {
+      var simples = typeof o === 'string';
+      var b = el('button', 'chat-opt', simples ? o : o.label);
+      if (!simples && o.description) { var d = el('small', 'chat-opt-d', o.description); b.appendChild(d); }
       b.type = 'button';
-      b.addEventListener('click', function () { enviar(t); });
+      b.addEventListener('click', function () { enviar(simples ? o : o.label, simples ? null : o.id); });
       opts.appendChild(b);
     });
     list.appendChild(opts);
@@ -116,7 +119,8 @@
     e.preventDefault();
     enviar(input.value);
   });
-  function enviar(bruto) {
+  // mostra "bruto" na tela; se vier "idReal" (botão da agenda), é o id que vai para a Dora
+  function enviar(bruto, idReal) {
     var text = String(bruto || '').trim();
     if (!text || busy) return;
     input.value = '';
@@ -128,7 +132,7 @@
     fetch(CHAT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sessionId, message: text })
+      body: JSON.stringify({ sessionId: sessionId, message: idReal || text })
     })
       .then(function (r) {
         if (r.status === 429) throw new Error('muitas');
@@ -143,7 +147,8 @@
         var sp = separarOpcoes(d.answer || '');
         typing.className = 'chat-msg bot';
         typing.textContent = sp.texto || 'Pode repetir, por favor?';
-        mostrarOpcoes(sp.opcoes);
+        var qr = d.quickReply && d.quickReply.options && d.quickReply.options.length ? d.quickReply.options : null;
+        mostrarOpcoes(qr || sp.opcoes);
       })
       .catch(function (err) {
         typing.className = 'chat-msg bot';

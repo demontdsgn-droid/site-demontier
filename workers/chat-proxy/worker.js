@@ -64,6 +64,20 @@ export default {
     if (!r.ok) return json({ erro: 'upstream', status: r.status }, r.status === 429 ? 429 : 502, origem);
 
     const dados = await r.json();
-    return json({ answer: String(dados.answer || ''), sessionId: dados.sessionId || null }, 200, origem);
+    // Agenda: o Chat-IA manda os dias e horários em quickReply.options (id, label, description).
+    // Repassamos só esses campos, como texto e com limite de tamanho.
+    let quickReply = null;
+    const q = dados.quickReply;
+    if (q && Array.isArray(q.options) && q.options.length) {
+      quickReply = {
+        options: q.options.slice(0, 20).map((o) => ({
+          id: String(o.id || '').slice(0, 300),
+          label: String(o.label || '').slice(0, 80),
+          description: String(o.description || '').slice(0, 120),
+        })).filter((o) => o.id && o.label),
+      };
+      if (!quickReply.options.length) quickReply = null;
+    }
+    return json({ answer: String(dados.answer || ''), sessionId: dados.sessionId || null, quickReply }, 200, origem);
   },
 };
