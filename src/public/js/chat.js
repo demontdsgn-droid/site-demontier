@@ -68,10 +68,10 @@
     return m;
   }
 
-  // Botões de resposta rápida. Ficam no fim da conversa e somem quando a pessoa escolhe (ou digita).
+  // ---------- botões de resposta rápida ----------
+  // lista: textos simples, ou {label, description, ...} (mostra o rótulo e a descrição pequena)
   var opts = null;
   function limparOpcoes() { if (opts && opts.parentNode) opts.parentNode.removeChild(opts); opts = null; }
-  // lista: textos simples, ou {label, id, description} (opções da agenda: mostra o rótulo e envia o id)
   function mostrarOpcoes(lista) {
     limparOpcoes();
     if (!lista.length) return;
@@ -79,61 +79,180 @@
     lista.slice(0, 14).forEach(function (o) {
       var simples = typeof o === 'string';
       var b = el('button', 'chat-opt', simples ? o : o.label);
-      if (!simples && o.description) { var d = el('small', 'chat-opt-d', o.description); b.appendChild(d); }
+      if (!simples && o.description) b.appendChild(el('small', 'chat-opt-d', o.description));
       b.type = 'button';
-      b.addEventListener('click', function () { enviar(simples ? o : o.label, simples ? null : o.id); });
+      b.addEventListener('click', function () { escolher(simples ? o : o.label, simples ? o : o.valor); });
       opts.appendChild(b);
     });
     list.appendChild(opts);
     list.scrollTop = list.scrollHeight;
   }
-  // a Dora termina perguntas de escolha com uma última linha: "Opções: Sim | Não"
-  function separarOpcoes(texto) {
-    var m = /(?:^|\n)[ \t]*Op[çc][õo]es:[ \t]*(.+?)[ \t]*$/i.exec(texto || '');
-    if (!m) return { texto: texto, opcoes: [] };
-    var ops = m[1].split('|').map(function (x) { return x.replace(/[`*_]/g, '').trim(); }).filter(function (x) { return x && x.length <= 40; });
-    return { texto: texto.slice(0, m.index).trim() || texto, opcoes: ops };
+
+  // ---------- roteiro da conversa ----------
+  // etapas: nome -> menu -> (servico) -> zap -> email -> dia -> hora -> fim; "duvida" fala com a Dora (IA)
+  var etapa = 'nome', nome = '', servico = '', acao = '', zap = '', email = '', diaEsc = '', dias = [];
+  var DIAS_SEM = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  function rotuloDia(iso) {
+    var p = iso.split('-'), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    return DIAS_SEM[d.getDay()] + ' ' + p[2] + '/' + p[1];
+  }
+  function chamaNome() { return nome ? ', ' + nome : ''; }
+  function placeholder(txt, modo) { input.placeholder = txt; input.setAttribute('inputmode', modo || 'text'); }
+  var MENU = ['Criar minha marca', 'Organizar minhas redes sociais', 'Tirar dúvidas'];
+  var PROXIMO = ['Marcar uma conversa', 'Pedir orçamento'];
+
+  function bot(texto, botoes, depoisMs) {
+    var m = add('bot', texto);
+    mostrarOpcoes(botoes || []);
+    return m;
   }
 
-  var started = false;
-  function toggle(open) {
-    panel.hidden = !open;
-    btn.setAttribute('aria-expanded', String(open));
-    if (open) {
-      if (!started) {
-        started = true;
-        add('bot', 'Oi! Eu sou a Dora, assistente da Demont Design. Como posso ajudar?');
-        mostrarOpcoes(['Pedir orçamento', 'Marcar reunião', 'Ver serviços']);
-      }
-      input.focus();
-    } else {
-      btn.focus();
-    }
+  function inicio() {
+    etapa = 'nome'; nome = ''; servico = ''; acao = '';
+    placeholder('Digite o seu nome');
+    bot('Oi! Eu sou a Dora, assistente da Demont Design. Como posso te chamar?', ['Prefiro não dizer']);
   }
-  btn.addEventListener('click', function () { toggle(panel.hidden); });
-  close.addEventListener('click', function () { toggle(false); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) toggle(false); });
+  function menu(texto) {
+    etapa = 'menu';
+    placeholder('Digite sua mensagem');
+    bot(texto, MENU);
+  }
 
-  var busy = false;
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    enviar(input.value);
-  });
-  // mostra "bruto" na tela; se vier "idReal" (botão da agenda), é o id que vai para a Dora
-  function enviar(bruto, idReal) {
-    var text = String(bruto || '').trim();
-    if (!text || busy) return;
-    input.value = '';
+  // aviso de "digitando…" enquanto fala com o servidor
+  function comEspera(fn) {
+    busy = true; send.disabled = true;
+    var t = add('bot typing', 'Digitando…');
+    fn(function () { if (t.parentNode) t.parentNode.removeChild(t); busy = false; send.disabled = false; input.focus(); });
+  }
+
+  function post(rota, corpo) {
+    return fetch(CHAT_URL + rota, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo || {}) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { d.__status = r.status; d.__ok = r.ok; return d; }); });
+  }
+  var ERRO_REDE = 'Não consegui falar com o sistema agora. Tente de novo em instantes ou fale pelo WhatsApp.';
+
+  function pedirZap() {
+    etapa = 'zap';
+    placeholder('Seu WhatsApp, com DDD', 'tel');
+    bot('Perfeito' + chamaNome() + '! Qual é o seu WhatsApp, com DDD?');
+  }
+  function pedirEmail() {
+    etapa = 'email';
+    placeholder('Seu e-mail', 'email');
+    bot('E o seu e-mail?');
+  }
+
+  function mostrarDias(intro) {
+    comEspera(function (fim) {
+      post('/horarios').then(function (d) {
+        fim();
+        if (!d.__ok || !d.dias || !d.dias.length) {
+          etapa = 'fim';
+          bot('Não encontrei horários livres agora. A Rafaela vai te chamar no WhatsApp para combinar o melhor dia.', ['Começar de novo']);
+          return;
+        }
+        dias = d.dias; etapa = 'dia';
+        placeholder('Escolha um dia nos botões');
+        bot(intro, d.dias.slice(0, 8).map(function (x) {
+          return { label: rotuloDia(x.data), valor: x.data, description: x.horarios.length + (x.horarios.length === 1 ? ' horário' : ' horários') };
+        }));
+      }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
+    });
+  }
+  function mostrarHoras(iso) {
+    var d = dias.filter(function (x) { return x.data === iso; })[0];
+    if (!d) { mostrarDias('Escolha um dia para a nossa conversa:'); return; }
+    diaEsc = iso; etapa = 'hora';
+    bot('Qual horário prefere em ' + rotuloDia(iso) + '?', d.horarios.concat(['Escolher outro dia']));
+  }
+  function marcar(hora) {
+    comEspera(function (fim) {
+      post('/agendar', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, data: diaEsc, hora: hora }).then(function (d) {
+        fim();
+        if (d.__status === 409) { mostrarDias('Esse horário acabou de ser ocupado. Estes são os que continuam livres:'); return; }
+        if (!d.__ok) { etapa = 'fim'; bot('Não consegui marcar agora. A Rafaela vai te chamar no WhatsApp para combinar o horário.', ['Começar de novo']); return; }
+        etapa = 'fim';
+        bot('Pronto' + chamaNome() + '! Sua conversa com a Rafaela está marcada para ' + rotuloDia(diaEsc) + ' às ' + hora + '. Você vai receber o convite por e-mail, com o link do Google Meet. A Rafaela também vai te chamar no WhatsApp para confirmar. Até lá!', ['Tirar dúvidas', 'Começar de novo']);
+      }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
+    });
+  }
+  function enviarOrcamento() {
+    comEspera(function (fim) {
+      post('/contato', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, tipo: 'orcamento' }).then(function (d) {
+        fim();
+        if (!d.__ok) { etapa = 'fim'; bot('Não consegui registrar agora. Tente de novo em instantes ou fale pelo WhatsApp.', ['Começar de novo']); return; }
+        etapa = 'fim';
+        bot('Obrigada' + chamaNome() + '! A Rafaela vai entender o seu projeto e te retorna com uma proposta em até 1 dia útil.', ['Tirar dúvidas', 'Começar de novo']);
+      }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
+    });
+  }
+
+  function iniciarDuvida(texto) {
+    etapa = 'duvida';
+    placeholder('Escreva a sua dúvida');
+    bot(texto || ('Pode perguntar' + chamaNome() + '! Escreva a sua dúvida aqui embaixo.'));
+    input.focus();
+  }
+
+  // toque em um botão
+  function escolher(rotulo, valor) {
+    if (busy) return;
     limparOpcoes();
-    add('me', text);
+    add('me', rotulo);
+    if (rotulo === 'Começar de novo') { nome = nome; menu('O que você precisa hoje' + chamaNome() + '?'); return; }
+    if (etapa === 'nome') {
+      nome = rotulo === 'Prefiro não dizer' ? '' : rotulo;
+      menu(nome ? 'Prazer, ' + nome + '! O que você precisa hoje?' : 'Tudo bem! O que você precisa hoje?');
+      return;
+    }
+    if (rotulo === 'Criar minha marca') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'A Rafaela cria a identidade visual conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Organizar minhas redes sociais') { servico = 'Social media'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'A Rafaela organiza as suas redes conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Tirar dúvidas' || rotulo === 'Tirar outra dúvida') { iniciarDuvida(); return; }
+    if (rotulo === 'Marcar uma conversa') { acao = 'reuniao'; pedirZap(); return; }
+    if (rotulo === 'Pedir orçamento') { acao = 'orcamento'; pedirZap(); return; }
+    if (etapa === 'dia') { mostrarHoras(valor || rotulo); return; }
+    if (etapa === 'hora') { if (rotulo === 'Escolher outro dia') { mostrarDias('Escolha um dia para a nossa conversa:'); return; } marcar(rotulo); return; }
+  }
+
+  // texto digitado
+  function digitou(texto) {
+    var t = String(texto || '').trim();
+    if (!t || busy) return;
+    limparOpcoes();
+    add('me', t);
+    if (etapa === 'nome') {
+      nome = t.replace(/\s+/g, ' ').slice(0, 40);
+      menu('Prazer, ' + nome + '! O que você precisa hoje?');
+      return;
+    }
+    if (etapa === 'zap') {
+      var n = t.replace(/\D/g, '');
+      if (n.length < 10 || n.length > 13) { bot('Não consegui entender esse número. Pode digitar com DDD, assim: 11 99999-9999?'); return; }
+      zap = n; pedirEmail(); return;
+    }
+    if (etapa === 'email') {
+      var e = t.toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { bot('Esse e-mail parece incompleto. Pode conferir? Exemplo: nome@email.com'); return; }
+      email = e;
+      if (acao === 'orcamento') enviarOrcamento(); else mostrarDias('Obrigada! Estes são os dias com vaga para conversar com a Rafaela:');
+      return;
+    }
+    if (etapa === 'dia' || etapa === 'hora') { bot('Toque em uma das opções abaixo, por favor.', null); mostrarOpcoes(etapa === 'dia' ? dias.slice(0, 8).map(function (x) { return { label: rotuloDia(x.data), valor: x.data, description: x.horarios.length + ' horários' }; }) : (dias.filter(function (x) { return x.data === diaEsc; })[0] || { horarios: [] }).horarios.concat(['Escolher outro dia'])); return; }
+    // qualquer outro texto (menu, serviço, fim, dúvida): é uma dúvida para a Dora
+    if (/agendar|marcar|reuni[aã]o|conversa com a rafa/i.test(t) && etapa !== 'duvida') { acao = 'reuniao'; pedirZap(); return; }
+    etapa = 'duvida';
+    perguntarDora(t);
+  }
+
+  // ---------- Dora (IA): só para dúvidas abertas ----------
+  function perguntarDora(text) {
     busy = true; send.disabled = true;
     var typing = add('bot typing', 'Digitando…');
-
     function chamar(sid) {
       return fetch(CHAT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: sid, message: idReal || text })
+        body: JSON.stringify({ sessionId: sid, message: text })
       }).then(function (r) {
         if (r.status === 429) throw new Error('muitas');
         // código de conversa velho ou inválido: começa uma conversa nova e tenta de novo, uma vez só
@@ -152,17 +271,18 @@
           sessionId = d.sessionId;
           try { sessionStorage.setItem(KEY, sessionId); } catch (e2) {}
         }
-        var sp = separarOpcoes(d.answer || '');
+        // a agenda e as opções ficam por conta do roteiro; aqui só o texto da resposta
+        var resp = String(d.answer || '').replace(/(?:^|\n)[ \t]*Op[çc][õo]es:[ \t]*.+$/i, '').trim();
         typing.className = 'chat-msg bot';
-        typing.textContent = sp.texto || 'Pode repetir, por favor?';
-        var qr = d.quickReply && d.quickReply.options && d.quickReply.options.length ? d.quickReply.options : null;
-        mostrarOpcoes(qr || sp.opcoes);
+        typing.textContent = resp || 'Pode repetir, por favor?';
+        mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento', 'Tirar outra dúvida']);
       })
       .catch(function (err) {
         typing.className = 'chat-msg bot';
         typing.textContent = err.message === 'muitas'
           ? 'Muitas mensagens em pouco tempo. Aguarde um instante e tente de novo.'
           : 'Não consegui responder agora. Tente de novo em instantes ou fale pelo WhatsApp.';
+        mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento']);
       })
       .then(function () {
         busy = false; send.disabled = false;
@@ -170,4 +290,26 @@
         input.focus();
       });
   }
+
+  // ---------- abrir, fechar, enviar ----------
+  var started = false, busy = false;
+  function toggle(open) {
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      if (!started) { started = true; inicio(); }
+      input.focus();
+    } else {
+      btn.focus();
+    }
+  }
+  btn.addEventListener('click', function () { toggle(panel.hidden); });
+  close.addEventListener('click', function () { toggle(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) toggle(false); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = input.value;
+    input.value = '';
+    digitou(t);
+  });
 })();
