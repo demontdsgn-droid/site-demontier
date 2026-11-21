@@ -489,6 +489,10 @@ body.case-open { overflow: hidden; }
 .chat-msg.bot { align-self: flex-start; background: var(--surface); }
 .chat-msg.me { align-self: flex-end; background: var(--c-oxblood); color: var(--c-cream); }
 .chat-msg.typing { opacity: .6; font-style: italic; }
+.chat-opts { display: flex; flex-wrap: wrap; gap: .4rem; align-self: flex-start; max-width: 95%; }
+.chat-opt { font: inherit; font-size: .86rem; padding: .4rem .8rem; border: 1px solid var(--c-oxblood); border-radius: 99px; background: transparent; color: var(--c-oxblood); cursor: pointer; white-space: nowrap; }
+.chat-opt:hover { background: var(--c-oxblood); color: var(--c-cream); }
+.chat-opt:focus-visible { outline: 2px solid var(--c-sage); outline-offset: 2px; }
 .chat-form { display: flex; gap: .4rem; padding: .6rem; border-top: 1px solid var(--line); }
 .chat-input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--bg); color: var(--fg); }
 .chat-send { font: inherit; padding: .55rem .9rem; border: 0; border-radius: .6rem; background: var(--c-oxblood); color: var(--c-cream); cursor: pointer; }

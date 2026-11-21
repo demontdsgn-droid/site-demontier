@@ -68,12 +68,40 @@
     return m;
   }
 
+  // Botões de resposta rápida. Ficam no fim da conversa e somem quando a pessoa escolhe (ou digita).
+  var opts = null;
+  function limparOpcoes() { if (opts && opts.parentNode) opts.parentNode.removeChild(opts); opts = null; }
+  function mostrarOpcoes(lista) {
+    limparOpcoes();
+    if (!lista.length) return;
+    opts = el('div', 'chat-opts');
+    lista.slice(0, 4).forEach(function (t) {
+      var b = el('button', 'chat-opt', t);
+      b.type = 'button';
+      b.addEventListener('click', function () { enviar(t); });
+      opts.appendChild(b);
+    });
+    list.appendChild(opts);
+    list.scrollTop = list.scrollHeight;
+  }
+  // a Dora termina perguntas de escolha com uma última linha: "Opções: Sim | Não"
+  function separarOpcoes(texto) {
+    var m = /(?:^|\n)[ \t]*Op[çc][õo]es:[ \t]*(.+?)[ \t]*$/i.exec(texto || '');
+    if (!m) return { texto: texto, opcoes: [] };
+    var ops = m[1].split('|').map(function (x) { return x.replace(/[`*_]/g, '').trim(); }).filter(function (x) { return x && x.length <= 40; });
+    return { texto: texto.slice(0, m.index).trim() || texto, opcoes: ops };
+  }
+
   var started = false;
   function toggle(open) {
     panel.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
     if (open) {
-      if (!started) { started = true; add('bot', 'Oi! Eu sou a Dora, assistente da Demont Design. Como posso ajudar?'); }
+      if (!started) {
+        started = true;
+        add('bot', 'Oi! Eu sou a Dora, assistente da Demont Design. Como posso ajudar?');
+        mostrarOpcoes(['Pedir orçamento', 'Marcar reunião', 'Ver serviços']);
+      }
       input.focus();
     } else {
       btn.focus();
@@ -86,9 +114,13 @@
   var busy = false;
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var text = input.value.trim();
+    enviar(input.value);
+  });
+  function enviar(bruto) {
+    var text = String(bruto || '').trim();
     if (!text || busy) return;
     input.value = '';
+    limparOpcoes();
     add('me', text);
     busy = true; send.disabled = true;
     var typing = add('bot typing', 'Digitando…');
@@ -108,8 +140,10 @@
           sessionId = d.sessionId;
           try { sessionStorage.setItem(KEY, sessionId); } catch (e2) {}
         }
+        var sp = separarOpcoes(d.answer || '');
         typing.className = 'chat-msg bot';
-        typing.textContent = d.answer || 'Pode repetir, por favor?';
+        typing.textContent = sp.texto || 'Pode repetir, por favor?';
+        mostrarOpcoes(sp.opcoes);
       })
       .catch(function (err) {
         typing.className = 'chat-msg bot';
@@ -122,5 +156,5 @@
         list.scrollTop = list.scrollHeight;
         input.focus();
       });
-  });
+  }
 })();
