@@ -129,16 +129,24 @@
     busy = true; send.disabled = true;
     var typing = add('bot typing', 'Digitando…');
 
-    fetch(CHAT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sessionId, message: idReal || text })
-    })
-      .then(function (r) {
+    function chamar(sid) {
+      return fetch(CHAT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: sid, message: idReal || text })
+      }).then(function (r) {
         if (r.status === 429) throw new Error('muitas');
+        // código de conversa velho ou inválido: começa uma conversa nova e tenta de novo, uma vez só
+        if (!r.ok && sid) {
+          sessionId = null;
+          try { sessionStorage.removeItem(KEY); } catch (e3) {}
+          return chamar(null);
+        }
         if (!r.ok) throw new Error('erro');
         return r.json();
-      })
+      });
+    }
+    chamar(sessionId)
       .then(function (d) {
         if (d.sessionId) {
           sessionId = d.sessionId;
