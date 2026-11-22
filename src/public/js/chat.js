@@ -141,7 +141,7 @@
   function pedirNegocio() {
     etapa = 'negocio'; negocio = ''; situacao = '';
     placeholder('Conte em poucas palavras');
-    bot('Antes de eu pegar os seus contatos' + chamaNome() + ', me conta um pouquinho: o que você faz ou o que pretende abrir? Pode ser bem curtinho.', ['Prefiro contar na conversa']);
+    bot('Antes de eu pegar o seu contato' + chamaNome() + ', me conta: qual é o ramo da sua empresa?');
   }
   function pedirSituacao() {
     if (servico === 'Identidade visual') {
@@ -214,7 +214,7 @@
         fim();
         if (!d.__ok) { etapa = 'fim'; bot('Não consegui registrar agora. Tente de novo em instantes ou fale pelo WhatsApp.', ['Começar de novo']); return; }
         etapa = 'fim';
-        bot('Tudo certo' + chamaNome() + '! Já passei o que você me contou para a Rafaela. Ela vai olhar com carinho e te chama no WhatsApp com uma proposta em até 1 dia útil. Foi um prazer conversar com você! ✨');
+        bot('Tudo certo' + chamaNome() + '! Já passei o que você me contou para a Rafaela. Ela vai olhar com carinho e te chama no WhatsApp para uma conversa mais detalhada sobre o seu projeto. Foi um prazer conversar com você. Até mais! ✨');
         placeholder('Escreva se tiver mais alguma dúvida');
       }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
     });
