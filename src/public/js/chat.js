@@ -258,7 +258,7 @@
   }
 
   // texto digitado
-  function ehPergunta(t) { return /\?/.test(t) || /^(qual|quais|quanto|quanta|como|quando|quem|onde|por ?que|voc[eê]s?|vcs)\b/i.test(t); }
+  function ehPergunta(t) { return /\?/.test(t) || /^(qual|quais|quanto|quanta|como|quando|quem|onde|por ?que|voc[eê]s?|vcs)\b/i.test(t) || /\b(pre[çc]os?|valor(es)?|desconto|prazo|custa|rob[ôo]|promo[çc][ãa]o)\b/i.test(t); }
   function digitou(texto) {
     var t = String(texto || '').trim();
     if (!t || busy) return;
