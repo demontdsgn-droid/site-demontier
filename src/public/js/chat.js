@@ -147,11 +147,11 @@
     if (servico === 'Identidade visual') {
       etapa = 'situacao';
       placeholder('Ou escreva aqui');
-      bot('Entendi! E sobre a marca: você já tem logotipo hoje?', ['Ainda não tenho', 'Tenho e quero renovar', 'Tenho e quero só organizar']);
+      bot('Entendi! E sobre a marca: você já tem logotipo hoje?', ['Ainda não tenho', 'Tenho e quero renovar']);
     } else if (servico === 'Estratégia digital') {
       etapa = 'situacao';
       placeholder('Escreva aqui');
-      bot('Boa! Em quais redes você já está (ou quer estar)? Pode dizer o @ também.', ['Ainda não tenho redes']);
+      bot('Boa! Em quais redes sociais você está ou quer estar? Se já tiver perfil, me passa o @ também.', ['Ainda não tenho redes']);
     } else if (servico === 'Site') {
       etapa = 'situacao';
       placeholder('Ou escreva aqui');
@@ -159,7 +159,7 @@
     } else if (servico === 'Papelaria') {
       etapa = 'situacao';
       placeholder('Escreva aqui');
-      bot('Que legal! Quais itens você precisa? Pode contar à vontade.', ['Ainda não sei']);
+      bot('Que legal! Quais itens você precisa? Pode contar um montão.', ['Ainda não sei']);
     } else { pedirZap(); }
   }
   function pedirZap() {
