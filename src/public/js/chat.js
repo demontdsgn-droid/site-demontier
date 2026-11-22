@@ -288,8 +288,10 @@
       return;
     }
     if (etapa === 'dia' || etapa === 'hora') { bot('Toque em uma das opções abaixo, por favor.', null); mostrarOpcoes(etapa === 'dia' ? dias.slice(0, 8).map(function (x) { return { label: rotuloDia(x.data), valor: x.data, description: x.horarios.length + ' horários' }; }) : (dias.filter(function (x) { return x.data === diaEsc; })[0] || { horarios: [] }).horarios.concat(['Escolher outro dia'])); return; }
-    if (etapa === 'menu') { bot('Toque em uma das opções abaixo, por favor.'); mostrarOpcoes(MENU); return; }
-    if (etapa === 'servico') { bot('Toque em uma das opções abaixo, por favor.'); mostrarOpcoes(PROXIMO); return; }
+    if (etapa === 'menu' && ehPergunta(t)) { perguntarDora(t, function () { etapa = 'menu'; mostrarOpcoes(MENU); }); return; }
+    if (etapa === 'servico' && ehPergunta(t)) { perguntarDora(t, function () { etapa = 'servico'; mostrarOpcoes(PROXIMO); }); return; }
+    if (etapa === 'menu') { bot('Escolha uma das opções abaixo, tá?'); mostrarOpcoes(MENU); return; }
+    if (etapa === 'servico') { bot('Escolha uma das opções abaixo, tá?'); mostrarOpcoes(PROXIMO); return; }
     // qualquer outro texto (fim ou dúvida): é uma dúvida para a Dora
     if (/agendar|marcar|reuni[aã]o|conversa com a rafa/i.test(t) && etapa !== 'duvida') { acao = 'reuniao'; pedirNegocio(); return; }
     etapa = 'duvida';
