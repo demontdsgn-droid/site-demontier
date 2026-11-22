@@ -138,7 +138,13 @@
     if (situacao) r.push((servico === 'Identidade visual' ? 'Marca: ' : servico === 'Estratégia digital' ? 'Redes: ' : servico === 'Site' ? 'Site: ' : 'Pedido: ') + situacao);
     return r.join(' | ').slice(0, 480);
   }
+  // quem já passou WhatsApp e e-mail não é perguntado de novo (ex.: pediu orçamento e depois quer marcar uma conversa)
+  function seguirComContato() {
+    if (acao === 'orcamento') enviarOrcamento();
+    else mostrarDias('Claro' + chamaNome() + '! Estes são os dias com vaga para conversar com a Rafaela:');
+  }
   function pedirNegocio() {
+    if (zap && email) { seguirComContato(); return; }
     etapa = 'negocio'; negocio = ''; situacao = '';
     placeholder('Conte em poucas palavras');
     bot('Antes de eu pegar o seu contato' + chamaNome() + ', me conta: qual é o ramo da sua empresa?');
