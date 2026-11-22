@@ -110,7 +110,7 @@
   function inicio() {
     etapa = 'nome'; nome = ''; servico = ''; acao = ''; negocio = ''; situacao = '';
     placeholder('Digite o seu nome');
-    bot('Oi! Eu sou a Dora, assistente da Demont Design. Como posso te chamar?', ['Prefiro não dizer']);
+    bot('Oi! Eu sou a Dora, assistente da Demont Design. Como posso te chamar?');
   }
   function menu(texto) {
     etapa = 'menu';
