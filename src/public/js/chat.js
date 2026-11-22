@@ -195,7 +195,8 @@
         if (d.__status === 409) { mostrarDias('Esse horário acabou de ser ocupado. Estes são os que continuam livres:'); return; }
         if (!d.__ok) { etapa = 'fim'; bot('Não consegui marcar agora. A Rafaela vai te chamar no WhatsApp para combinar o horário.', ['Começar de novo']); return; }
         etapa = 'fim';
-        bot('Pronto' + chamaNome() + '! Sua conversa com a Rafaela está marcada para ' + rotuloDia(diaEsc) + ' às ' + hora + '. Você vai receber o convite por e-mail, com o link do Google Meet. A Rafaela também vai te chamar no WhatsApp para confirmar. Até lá!', ['Tirar dúvidas', 'Começar de novo']);
+        bot('Pronto' + chamaNome() + '! Sua conversa com a Rafaela está marcada para ' + rotuloDia(diaEsc) + ' às ' + hora + '. Você vai receber o convite por e-mail, com o link do Google Meet. A Rafaela também vai te chamar no WhatsApp para confirmar. Até lá!');
+        placeholder('Escreva se tiver mais alguma dúvida');
       }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
     });
   }
@@ -205,7 +206,8 @@
         fim();
         if (!d.__ok) { etapa = 'fim'; bot('Não consegui registrar agora. Tente de novo em instantes ou fale pelo WhatsApp.', ['Começar de novo']); return; }
         etapa = 'fim';
-        bot('Obrigada' + chamaNome() + '! A Rafaela vai ler o que você me contou e te retorna com uma proposta em até 1 dia útil.', ['Tirar dúvidas', 'Começar de novo']);
+        bot('Obrigada' + chamaNome() + '! A Rafaela vai ler o que você me contou e te retorna com uma proposta em até 1 dia útil.');
+        placeholder('Escreva se tiver mais alguma dúvida');
       }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
     });
   }
