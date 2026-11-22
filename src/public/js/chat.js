@@ -264,7 +264,7 @@
     limparOpcoes();
     add('me', t);
     if (etapa === 'nome') {
-      nome = t.replace(/\s+/g, ' ').slice(0, 40);
+      nome = t.replace(/\s+/g, ' ').slice(0, 40).replace(/(^|\s)([a-zà-ú])/g, function (m, a, b) { return a + b.toUpperCase(); });
       menu('Prazer, ' + nome + '! O que você precisa hoje?');
       return;
     }
@@ -272,11 +272,13 @@
     if (etapa === 'situacao') { situacao = t.slice(0, 200); pedirZap(); return; }
     if (etapa === 'zap') {
       var n = t.replace(/\D/g, '');
+      if (/[a-zà-ú]{3,}/i.test(t)) { perguntarDora(t, function () { etapa = 'zap'; bot('Voltando ao seu contato' + chamaNome() + ': qual é o seu WhatsApp, com DDD?'); }); return; }
       if (n.length < 10 || n.length > 13) { bot('Não consegui entender esse número. Pode digitar com DDD, assim: 11 99999-9999?'); return; }
       zap = n; pedirEmail(); return;
     }
     if (etapa === 'email') {
       var e = t.toLowerCase();
+      if (e.indexOf('@') < 0 && (/\?/.test(t) || t.split(/\s+/).length >= 3)) { perguntarDora(t, function () { etapa = 'email'; bot('Voltando ao seu contato' + chamaNome() + ': qual é o seu e-mail?'); }); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { bot('Esse e-mail parece incompleto. Pode conferir? Exemplo: nome@email.com'); return; }
       email = e;
       if (acao === 'orcamento') enviarOrcamento(); else mostrarDias('Obrigada! Estes são os dias com vaga para conversar com a Rafaela:');
@@ -292,7 +294,7 @@
   }
 
   // ---------- Dora (IA): só para dúvidas abertas ----------
-  function perguntarDora(text) {
+  function perguntarDora(text, retomar) {
     busy = true; send.disabled = true;
     var typing = add('bot typing', 'Digitando…');
     function chamar(sid) {
@@ -322,14 +324,16 @@
         var resp = String(d.answer || '').replace(/(?:^|\n)[ \t]*Op[çc][õo]es:[ \t]*.+$/i, '').trim();
         typing.className = 'chat-msg bot';
         typing.textContent = resp || 'Pode repetir, por favor?';
-        mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento', 'Tirar outra dúvida']);
+        if (retomar) retomar();
+        else if (zap && email) placeholder('Escreva se tiver mais alguma dúvida');
+        else mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento']);
       })
       .catch(function (err) {
         typing.className = 'chat-msg bot';
         typing.textContent = err.message === 'muitas'
           ? 'Muitas mensagens em pouco tempo. Aguarde um instante e tente de novo.'
           : 'Não consegui responder agora. Tente de novo em instantes ou fale pelo WhatsApp.';
-        mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento']);
+        if (retomar) retomar(); else if (!(zap && email)) mostrarOpcoes(['Marcar uma conversa', 'Pedir orçamento']);
       })
       .then(function () {
         busy = false; send.disabled = false;
