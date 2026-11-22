@@ -98,7 +98,7 @@
   }
   function chamaNome() { return nome ? ', ' + nome : ''; }
   function placeholder(txt, modo) { input.placeholder = txt; input.setAttribute('inputmode', modo || 'text'); }
-  var MENU = ['Criar minha marca', 'Organizar minhas redes sociais', 'Tirar dúvidas'];
+  var MENU = ['Identidade visual', 'Estratégia digital', 'Site', 'Papelaria', 'Tirar dúvidas'];
   var PROXIMO = ['Marcar uma conversa', 'Pedir orçamento'];
 
   function bot(texto, botoes, depoisMs) {
@@ -135,7 +135,7 @@
   function resumoProjeto() {
     var r = [];
     if (negocio) r.push('Negócio: ' + negocio);
-    if (situacao) r.push((servico === 'Social media' ? 'Redes: ' : 'Marca: ') + situacao);
+    if (situacao) r.push((servico === 'Identidade visual' ? 'Marca: ' : servico === 'Estratégia digital' ? 'Redes: ' : servico === 'Site' ? 'Site: ' : 'Pedido: ') + situacao);
     return r.join(' | ').slice(0, 480);
   }
   function pedirNegocio() {
@@ -148,10 +148,18 @@
       etapa = 'situacao';
       placeholder('Ou escreva aqui');
       bot('Entendi! E sobre a marca: você já tem logotipo hoje?', ['Ainda não tenho', 'Tenho e quero renovar', 'Tenho e quero só organizar']);
-    } else if (servico === 'Social media') {
+    } else if (servico === 'Estratégia digital') {
       etapa = 'situacao';
       placeholder('Escreva aqui');
       bot('Boa! Em quais redes você já está (ou quer estar)? Pode dizer o @ também.', ['Ainda não tenho redes']);
+    } else if (servico === 'Site') {
+      etapa = 'situacao';
+      placeholder('Ou escreva aqui');
+      bot('Boa! E você já tem um site hoje?', ['Ainda não tenho', 'Tenho e quero refazer']);
+    } else if (servico === 'Papelaria') {
+      etapa = 'situacao';
+      placeholder('Escreva aqui');
+      bot('Que legal! Quais itens você tem em mente? Cartão de visita, adesivos, embalagens… pode contar à vontade.', ['Ainda não sei']);
     } else { pedirZap(); }
   }
   function pedirZap() {
@@ -230,8 +238,10 @@
       menu(nome ? 'Prazer, ' + nome + '! O que você precisa hoje?' : 'Tudo bem! O que você precisa hoje?');
       return;
     }
-    if (rotulo === 'Criar minha marca') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'A Rafaela cria a identidade visual conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
-    if (rotulo === 'Organizar minhas redes sociais') { servico = 'Social media'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'A Rafaela organiza as suas redes conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Identidade visual') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'A Rafaela cria a identidade visual conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Estratégia digital') { servico = 'Estratégia digital'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'A Rafaela cuida da presença da sua marca nas redes, conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Site') { servico = 'Site'; etapa = 'servico'; bot((nome ? 'Show, ' + nome + '! ' : 'Show! ') + 'A Rafaela cria o site conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Papelaria') { servico = 'Papelaria'; etapa = 'servico'; bot((nome ? 'Adorei, ' + nome + '! ' : 'Adorei! ') + 'A Rafaela cria a papelaria da sua marca conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
     if (rotulo === 'Tirar dúvidas' || rotulo === 'Tirar outra dúvida') { iniciarDuvida(); return; }
     if (etapa === 'negocio') { negocio = ''; pedirSituacao(); return; }
     if (etapa === 'situacao') { situacao = rotulo; pedirZap(); return; }

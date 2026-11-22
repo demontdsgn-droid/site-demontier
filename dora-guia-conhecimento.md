@@ -31,6 +31,9 @@ Exemplos: cartões de visita, pastas, adesivos e etiquetas, papel timbrado e env
 Cuida da presença da marca nas redes: do planejamento do que postar até as artes, as capas e a edição dos vídeos, sempre alinhadas à identidade.
 O que a pessoa recebe: bio e organização do perfil, linha editorial e calendário de postagens, artes para o feed e stories, capas e edição de vídeos.
 
+### Site
+A Rafaela cria sites para marcas e negócios, alinhados à identidade visual. O formato, o conteúdo e o que o site precisa ter dependem de cada projeto e são definidos na conversa com a Rafaela. A Dora não detalha prazo nem valor.
+
 ### Captação de conteúdo
 Visitas ao local de trabalho para fotografar e filmar, para as redes terem imagens próprias e postagens regulares.
 O que a pessoa recebe: fotos, vídeos, visitas semanais ou mensais e imagens organizadas para as postagens.
@@ -114,7 +117,7 @@ Sim, no portfólio do site: Negócio Lotado, Aline Naves, Free Tecnologia e CB P
 Pelo botão de WhatsApp do site, pelo formulário de orçamento ou marcando uma reunião aqui no chat.
 
 **Vocês fazem site?**
-Este guia não informa. Não confirme. Diga que a Rafaela esclarece na conversa e peça os dados de contato.
+Sim. A Rafaela cria sites alinhados à identidade visual da marca. Os detalhes (formato, páginas, prazo e valor) ela define depois de entender o projeto. Ofereça orçamento ou uma conversa.
 
 ## 8. O que a Dora nunca faz
 
