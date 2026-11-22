@@ -258,6 +258,7 @@
   }
 
   // texto digitado
+  function ehPergunta(t) { return /\?/.test(t) || /^(qual|quais|quanto|quanta|como|quando|quem|onde|por ?que|voc[eê]s?|vcs)\b/i.test(t); }
   function digitou(texto) {
     var t = String(texto || '').trim();
     if (!t || busy) return;
@@ -268,6 +269,8 @@
       menu('Prazer, ' + nome + '! O que você precisa hoje?');
       return;
     }
+    if (etapa === 'negocio' && ehPergunta(t)) { perguntarDora(t, function () { etapa = 'negocio'; bot('Voltando ao seu projeto' + chamaNome() + ': qual é o ramo da sua empresa?'); }); return; }
+    if (etapa === 'situacao' && ehPergunta(t)) { perguntarDora(t, function () { pedirSituacao(); }); return; }
     if (etapa === 'negocio') { negocio = t.slice(0, 200); pedirSituacao(); return; }
     if (etapa === 'situacao') { situacao = t.slice(0, 200); pedirZap(); return; }
     if (etapa === 'zap') {
