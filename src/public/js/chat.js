@@ -159,7 +159,7 @@
     } else if (servico === 'Papelaria') {
       etapa = 'situacao';
       placeholder('Escreva aqui');
-      bot('Que legal! Quais itens você tem em mente? Cartão de visita, adesivos, embalagens… pode contar à vontade.', ['Ainda não sei']);
+      bot('Que legal! Quais itens você precisa? Pode contar à vontade.', ['Ainda não sei']);
     } else { pedirZap(); }
   }
   function pedirZap() {
@@ -238,10 +238,10 @@
       menu(nome ? 'Prazer, ' + nome + '! O que você precisa hoje?' : 'Tudo bem! O que você precisa hoje?');
       return;
     }
-    if (rotulo === 'Identidade visual') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'Na identidade visual, nós criamos a marca conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
-    if (rotulo === 'Estratégia digital') { servico = 'Estratégia digital'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'Na estratégia digital, nós cuidamos da presença da sua marca nas redes, conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
-    if (rotulo === 'Site') { servico = 'Site'; etapa = 'servico'; bot((nome ? 'Show, ' + nome + '! ' : 'Show! ') + 'No site, nós criamos o espaço da sua marca na internet, conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
-    if (rotulo === 'Papelaria') { servico = 'Papelaria'; etapa = 'servico'; bot((nome ? 'Adorei, ' + nome + '! ' : 'Adorei! ') + 'Na papelaria, nós criamos os itens da sua marca conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Identidade visual') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'Na identidade visual, nós criamos o visual do seu negócio, para ele ser reconhecido e lembrado, conforme o que ele precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Estratégia digital') { servico = 'Estratégia digital'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'Na estratégia digital, nós cuidamos das suas redes sociais, do planejamento do que postar até as artes, para o seu negócio ser visto por quem importa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Site') { servico = 'Site'; etapa = 'servico'; bot((nome ? 'Show, ' + nome + '! ' : 'Show! ') + 'No site, nós criamos a página do seu negócio na internet, para os clientes te encontrarem e conhecerem o seu trabalho. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
+    if (rotulo === 'Papelaria') { servico = 'Papelaria'; etapa = 'servico'; bot((nome ? 'Adorei, ' + nome + '! ' : 'Adorei! ') + 'Na papelaria, nós criamos os materiais do seu negócio, como cartão de visita, adesivos e embalagens. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
     if (rotulo === 'Tirar dúvidas' || rotulo === 'Tirar outra dúvida') { iniciarDuvida(); return; }
     if (etapa === 'negocio') { negocio = ''; pedirSituacao(); return; }
     if (etapa === 'situacao') { situacao = rotulo; pedirZap(); return; }
