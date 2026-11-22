@@ -57,10 +57,10 @@ export default {
       if (caminho === '/horarios') { rota = '/api/dora/horarios'; init = { method: 'GET' }; }
       else if (caminho === '/agendar') {
         rota = '/api/dora/agendar';
-        init = { method: 'POST', body: JSON.stringify({ nome: txt(b.nome, 80), email: txt(b.email, 120), whatsapp: txt(b.whatsapp, 20), servico: txt(b.servico, 80), data: txt(b.data, 10), hora: txt(b.hora, 5) }) };
+        init = { method: 'POST', body: JSON.stringify({ nome: txt(b.nome, 80), email: txt(b.email, 120), whatsapp: txt(b.whatsapp, 20), servico: txt(b.servico, 80), resumo: txt(b.resumo, 500), data: txt(b.data, 10), hora: txt(b.hora, 5) }) };
       } else {
         rota = '/api/dora/contato';
-        init = { method: 'POST', body: JSON.stringify({ nome: txt(b.nome, 80), email: txt(b.email, 120), whatsapp: txt(b.whatsapp, 20), servico: txt(b.servico, 80), tipo: b.tipo === 'orcamento' ? 'orcamento' : '' }) };
+        init = { method: 'POST', body: JSON.stringify({ nome: txt(b.nome, 80), email: txt(b.email, 120), whatsapp: txt(b.whatsapp, 20), servico: txt(b.servico, 80), resumo: txt(b.resumo, 500), tipo: b.tipo === 'orcamento' ? 'orcamento' : '' }) };
       }
       let pr;
       try {

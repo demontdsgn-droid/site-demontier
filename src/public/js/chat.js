@@ -90,7 +90,7 @@
 
   // ---------- roteiro da conversa ----------
   // etapas: nome -> menu -> (servico) -> zap -> email -> dia -> hora -> fim; "duvida" fala com a Dora (IA)
-  var etapa = 'nome', nome = '', servico = '', acao = '', zap = '', email = '', diaEsc = '', dias = [];
+  var etapa = 'nome', nome = '', servico = '', acao = '', zap = '', email = '', diaEsc = '', dias = [], negocio = '', situacao = '';
   var DIAS_SEM = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
   function rotuloDia(iso) {
     var p = iso.split('-'), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
@@ -108,7 +108,7 @@
   }
 
   function inicio() {
-    etapa = 'nome'; nome = ''; servico = ''; acao = '';
+    etapa = 'nome'; nome = ''; servico = ''; acao = ''; negocio = ''; situacao = '';
     placeholder('Digite o seu nome');
     bot('Oi! Eu sou a Dora, assistente da Demont Design. Como posso te chamar?', ['Prefiro não dizer']);
   }
@@ -131,6 +131,29 @@
   }
   var ERRO_REDE = 'Não consegui falar com o sistema agora. Tente de novo em instantes ou fale pelo WhatsApp.';
 
+  // antes de pedir o contato, a Dora conhece o projeto (o que a pessoa faz e como está a marca/redes hoje)
+  function resumoProjeto() {
+    var r = [];
+    if (negocio) r.push('Negócio: ' + negocio);
+    if (situacao) r.push((servico === 'Social media' ? 'Redes: ' : 'Marca: ') + situacao);
+    return r.join(' | ').slice(0, 480);
+  }
+  function pedirNegocio() {
+    etapa = 'negocio'; negocio = ''; situacao = '';
+    placeholder('Conte em poucas palavras');
+    bot('Antes de eu pegar os seus contatos' + chamaNome() + ', me conta um pouquinho: o que você faz ou o que pretende abrir? Pode ser bem curtinho.', ['Prefiro contar na conversa']);
+  }
+  function pedirSituacao() {
+    if (servico === 'Identidade visual') {
+      etapa = 'situacao';
+      placeholder('Ou escreva aqui');
+      bot('Entendi! E sobre a marca: você já tem logotipo hoje?', ['Ainda não tenho', 'Tenho e quero renovar', 'Tenho e quero só organizar']);
+    } else if (servico === 'Social media') {
+      etapa = 'situacao';
+      placeholder('Escreva aqui');
+      bot('Boa! Em quais redes você já está (ou quer estar)? Pode dizer o @ também.', ['Ainda não tenho redes']);
+    } else { pedirZap(); }
+  }
   function pedirZap() {
     etapa = 'zap';
     placeholder('Seu WhatsApp, com DDD', 'tel');
@@ -167,7 +190,7 @@
   }
   function marcar(hora) {
     comEspera(function (fim) {
-      post('/agendar', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, data: diaEsc, hora: hora }).then(function (d) {
+      post('/agendar', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, resumo: resumoProjeto(), data: diaEsc, hora: hora }).then(function (d) {
         fim();
         if (d.__status === 409) { mostrarDias('Esse horário acabou de ser ocupado. Estes são os que continuam livres:'); return; }
         if (!d.__ok) { etapa = 'fim'; bot('Não consegui marcar agora. A Rafaela vai te chamar no WhatsApp para combinar o horário.', ['Começar de novo']); return; }
@@ -178,11 +201,11 @@
   }
   function enviarOrcamento() {
     comEspera(function (fim) {
-      post('/contato', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, tipo: 'orcamento' }).then(function (d) {
+      post('/contato', { nome: nome || 'Visitante do site', email: email, whatsapp: zap, servico: servico, resumo: resumoProjeto(), tipo: 'orcamento' }).then(function (d) {
         fim();
         if (!d.__ok) { etapa = 'fim'; bot('Não consegui registrar agora. Tente de novo em instantes ou fale pelo WhatsApp.', ['Começar de novo']); return; }
         etapa = 'fim';
-        bot('Obrigada' + chamaNome() + '! A Rafaela vai entender o seu projeto e te retorna com uma proposta em até 1 dia útil.', ['Tirar dúvidas', 'Começar de novo']);
+        bot('Obrigada' + chamaNome() + '! A Rafaela vai ler o que você me contou e te retorna com uma proposta em até 1 dia útil.', ['Tirar dúvidas', 'Começar de novo']);
       }).catch(function () { fim(); etapa = 'fim'; bot(ERRO_REDE, ['Começar de novo']); });
     });
   }
@@ -208,8 +231,10 @@
     if (rotulo === 'Criar minha marca') { servico = 'Identidade visual'; etapa = 'servico'; bot((nome ? 'Que legal, ' + nome + '! ' : 'Que legal! ') + 'A Rafaela cria a identidade visual conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
     if (rotulo === 'Organizar minhas redes sociais') { servico = 'Social media'; etapa = 'servico'; bot((nome ? 'Boa, ' + nome + '! ' : 'Boa! ') + 'A Rafaela organiza as suas redes conforme o que o seu negócio precisa. Cada projeto é montado sob medida. Como você quer seguir?', PROXIMO); return; }
     if (rotulo === 'Tirar dúvidas' || rotulo === 'Tirar outra dúvida') { iniciarDuvida(); return; }
-    if (rotulo === 'Marcar uma conversa') { acao = 'reuniao'; pedirZap(); return; }
-    if (rotulo === 'Pedir orçamento') { acao = 'orcamento'; pedirZap(); return; }
+    if (etapa === 'negocio') { negocio = ''; pedirSituacao(); return; }
+    if (etapa === 'situacao') { situacao = rotulo; pedirZap(); return; }
+    if (rotulo === 'Marcar uma conversa') { acao = 'reuniao'; pedirNegocio(); return; }
+    if (rotulo === 'Pedir orçamento') { acao = 'orcamento'; pedirNegocio(); return; }
     if (etapa === 'dia') { mostrarHoras(valor || rotulo); return; }
     if (etapa === 'hora') { if (rotulo === 'Escolher outro dia') { mostrarDias('Escolha um dia para a nossa conversa:'); return; } marcar(rotulo); return; }
   }
@@ -225,6 +250,8 @@
       menu('Prazer, ' + nome + '! O que você precisa hoje?');
       return;
     }
+    if (etapa === 'negocio') { negocio = t.slice(0, 200); pedirSituacao(); return; }
+    if (etapa === 'situacao') { situacao = t.slice(0, 200); pedirZap(); return; }
     if (etapa === 'zap') {
       var n = t.replace(/\D/g, '');
       if (n.length < 10 || n.length > 13) { bot('Não consegui entender esse número. Pode digitar com DDD, assim: 11 99999-9999?'); return; }
@@ -239,7 +266,7 @@
     }
     if (etapa === 'dia' || etapa === 'hora') { bot('Toque em uma das opções abaixo, por favor.', null); mostrarOpcoes(etapa === 'dia' ? dias.slice(0, 8).map(function (x) { return { label: rotuloDia(x.data), valor: x.data, description: x.horarios.length + ' horários' }; }) : (dias.filter(function (x) { return x.data === diaEsc; })[0] || { horarios: [] }).horarios.concat(['Escolher outro dia'])); return; }
     // qualquer outro texto (menu, serviço, fim, dúvida): é uma dúvida para a Dora
-    if (/agendar|marcar|reuni[aã]o|conversa com a rafa/i.test(t) && etapa !== 'duvida') { acao = 'reuniao'; pedirZap(); return; }
+    if (/agendar|marcar|reuni[aã]o|conversa com a rafa/i.test(t) && etapa !== 'duvida') { acao = 'reuniao'; pedirNegocio(); return; }
     etapa = 'duvida';
     perguntarDora(t);
   }
