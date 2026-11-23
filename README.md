@@ -7,7 +7,7 @@ npm install
 npm start
 ```
 
-Abra http://localhost:3000 (porta alterável com `PORT=4000 npm start`).
+Abra http://localhost:8765 (porta alterável com `PORT=4000 npm start`).
 
 ## Estrutura
 
