@@ -265,6 +265,15 @@
     limparOpcoes();
     add('me', t);
     if (etapa === 'nome') {
+      // "oi", "bom dia", "tudo bem?" etc. não são nome: cumprimenta e pergunta de novo
+      var semPont = t.toLowerCase().replace(/[!?.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+      if (/^(oi+e*|ol[aá]+|opa+|e ?a[ií]|eai|hey|hello|hi|salve|bom dia|boa tarde|boa noite|tudo bem|tudo bom|td bem|alo|al[oô]|oie+|oii+)( .*)?$/.test(semPont) && semPont.split(' ').length <= 4) {
+        bot('Oi! 😊 Pra gente começar, como posso te chamar?'); return;
+      }
+      if (/\?/.test(t) || semPont.split(' ').length > 5) {
+        perguntarDora(t, function () { etapa = 'nome'; bot('Voltando: como posso te chamar?'); }); return;
+      }
+      t = t.replace(/^(meu nome [eé]|me chamo|sou (o|a)?|pode me chamar de|eu sou (o|a)?|aqui [eé] (o|a)?)\s+/i, '').trim() || t;
       nome = t.replace(/\s+/g, ' ').slice(0, 40).replace(/(^|\s)([a-zà-ú])/g, function (m, a, b) { return a + b.toUpperCase(); });
       menu('Prazer, ' + nome + '! O que você precisa hoje?');
       return;
